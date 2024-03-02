@@ -41,6 +41,15 @@ public class Enrollment {
         verifyInvariants();
     }
 
+    public void update(EnrollmentDto enrollmentDto, Volunteer volunteer, Activity activity) {
+        setVolunteer(volunteer);
+        setActivity(activity);
+        setMotivation(enrollmentDto.getMotivation());
+        setEnrollmentDate(LocalDateTime.now());
+        verifyInvariants();
+
+    }
+
     public Integer getId() {
         return id;
     }
