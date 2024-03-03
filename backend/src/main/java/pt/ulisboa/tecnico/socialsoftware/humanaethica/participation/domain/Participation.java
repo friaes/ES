@@ -89,6 +89,7 @@ public class Participation {
     public void verifyInvariants() {
         checkActivityLimit();
         checkDuplicatedParticipation();
+        checkApplicationDeadline();
     }
 
     private void checkActivityLimit() {
@@ -100,6 +101,12 @@ public class Participation {
     private void checkDuplicatedParticipation() {
         if (activity.getParticipations().contains(this)) {
             throw new IllegalArgumentException("Volunteer is already participating in this activity");
+        }
+    }
+
+    private void checkApplicationDeadline() {
+        if (acceptanceDate.isBefore(activity.getApplicationDeadline())) {
+            throw new IllegalArgumentException("Application period is still ongoing");
         }
     }
 
