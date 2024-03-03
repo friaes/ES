@@ -44,6 +44,7 @@ public class Participation {
         setVolunteer(volunteer);
         setRating(participationDto.getRating());
         setAcceptanceDate(DateHandler.toLocalDateTime(participationDto.getAcceptanceDate()));
+        verifyInvariants();
     }
 
 
@@ -85,6 +86,15 @@ public class Participation {
             "}";
     }
 
+    public void verifyInvariants() {
+        checkActivityLimit();
+    }
+
+    private void checkActivityLimit() {
+        if (activity.getParticipations().length() + 1 > activity.getParticipationLimit()) {
+            throw new IllegalArgumentException("Number of participations exceeded");
+        }
+    }
 
 }
 
