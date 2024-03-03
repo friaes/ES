@@ -88,11 +88,18 @@ public class Participation {
 
     public void verifyInvariants() {
         checkActivityLimit();
+        checkDuplicatedParticipation();
     }
 
     private void checkActivityLimit() {
         if (activity.getParticipations().length() + 1 > activity.getParticipationLimit()) {
             throw new IllegalArgumentException("Number of participations exceeded");
+        }
+    }
+
+    private void checkDuplicatedParticipation() {
+        if (activity.getParticipations().contains(this)) {
+            throw new IllegalArgumentException("Volunteer is already participating in this activity");
         }
     }
 
