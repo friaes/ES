@@ -6,6 +6,7 @@ import org.checkerframework.checker.units.qual.min;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
 
@@ -94,19 +95,20 @@ public class Enrollment {
 
     private void minimumMotivation() {
         if (motivation.length() < 10) {
-            throw new IllegalArgumentException("Motivation cannot be empty");
+            throw new HEException(MINIMUM_MOTIVATION_LENGTH);
         }
     }
 
+    //um voluntário só pode estar inscrito uma vez numa atividade
     private void onlyOneEnrollmentPerActivity() {
-        if (activity.getEnrollments().contains(this)) {
-            throw new IllegalArgumentException("Volunteer already enrolled in this activity");
+        if (volunteer.getEnrollments().stream().anyMatch(e -> e.getActivity().equals(activity))) {
+            throw new HEException(VOLUNTERR_ALREADY_ENROLLED_IN_ACTIVITY);
         }
     }
 
     private void enrollmentDateBeforeAcDate() {
         if (enrollmentDate.isAfter(activity.getEndingDate())) {
-            throw new IllegalArgumentException("Enrollment date must be before activity starting date");
+            throw new HEException(ENROLLMENT_DATE_AFTER_ACTIVITY_DATE);
         }
     }
 }

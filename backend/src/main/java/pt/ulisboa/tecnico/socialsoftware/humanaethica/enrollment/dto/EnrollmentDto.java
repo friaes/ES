@@ -5,7 +5,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
 
-public class Enrollmentdto {
+public class EnrollmentDto {
     
     private Integer id;
     private String motivation;
@@ -13,10 +13,10 @@ public class Enrollmentdto {
     private UserDto volunteer;
     private ActivityDto activity;
 
-    public Enrollmentdto() {
+    public EnrollmentDto() {
     }
 
-    public Enrollmentdto(Enrollment enrollment) {
+    public EnrollmentDto(Enrollment enrollment) {
         setId(enrollment.getId());
         setMotivation(enrollment.getMotivation());
         setEnrollmentDate(DateHandler.toISOString(enrollment.getEnrollmentDate()));
