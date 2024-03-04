@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain;
 
 import jakarta.persistence.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
@@ -11,8 +12,10 @@ import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMes
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.PARTICIPATION_EXCEEDS_ACTIVITY_LIMIT;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme;
 
 
 @Entity
@@ -43,6 +46,13 @@ public class Participation {
         setAcceptanceDate(DateHandler.toLocalDateTime(participationDto.getAcceptanceDate()));
         verifyInvariants();
     }
+
+    public void update(ParticipationDto participationDto) {
+        setRating(participationDto.getRating());
+
+        verifyInvariants();
+    }
+
 
 
     public Integer getId() { return id; }
