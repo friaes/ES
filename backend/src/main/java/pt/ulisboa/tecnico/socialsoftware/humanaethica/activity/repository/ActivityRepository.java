@@ -19,6 +19,4 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
     @Modifying
     @Query(value = "DELETE FROM activity_themes", nativeQuery = true)
     void deleteAllActivityTheme();
-
-
 }
