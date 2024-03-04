@@ -30,6 +30,8 @@ public class UserDto {
     private String lastAccess;
     
     private boolean hasDocument;
+    //Add the relationship between the user and the enrolments
+    private List<EnrolmentDto> enrolments = new ArrayList<>();
 
     public UserDto() {
     }
@@ -156,5 +158,12 @@ public class UserDto {
 
     public void setHasDocument(boolean hasDocument) {
         this.hasDocument = hasDocument;
+    }
+    //Add the getter for the enrolments
+    public List<EnrolmentDto> getEnrolments() {
+        return enrolments;
+    }
+    public addEnrolment(EnrolmentDto enrolment) {
+        this.enrolments.add(enrolment);
     }
 }

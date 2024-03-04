@@ -38,6 +38,10 @@ public class Activity {
 
     @ManyToOne
     private Institution institution;
+    
+    //Add the relationship between the activity and the enrolments
+    @oneToMany
+    private List<Enrolment> enrolments = new ArrayList<>();
 
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
@@ -55,7 +59,7 @@ public class Activity {
         setStartingDate(DateHandler.toLocalDateTime(activityDto.getStartingDate()));
         setEndingDate(DateHandler.toLocalDateTime(activityDto.getEndingDate()));
         setApplicationDeadline(DateHandler.toLocalDateTime(activityDto.getApplicationDeadline()));
-
+        
         for (Theme theme : themes) {
             addTheme(theme);
         }
@@ -315,5 +319,17 @@ public class Activity {
                 .anyMatch(activity -> activity != this && activity.getName().equals(this.getName()))) {
             throw new HEException(ACTIVITY_ALREADY_EXISTS);
         }
+    }
+    //Add the methods to manage the enrolments
+    private void addEnrolment(Enrolment enrolment) {
+        this.enrolments.add(enrolment);
+    }
+    //Remove the enrolment from the list
+    private void removeEnrolment(Enrolment enrolment) {
+        this.enrolments.remove(enrolment);
+    }
+    //Get the list of enrolments
+    private List<Enrolment> getEnrolments() {
+        return this.enrolments;
     }
 }

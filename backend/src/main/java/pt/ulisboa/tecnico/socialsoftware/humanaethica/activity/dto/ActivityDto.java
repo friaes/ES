@@ -20,6 +20,7 @@ public class ActivityDto {
     private String creationDate;
     private List<ThemeDto> themes;
     private InstitutionDto institution;
+    private List<EnrolmentDto> enrolments;
 
     public ActivityDto(){
     }
@@ -138,6 +139,17 @@ public class ActivityDto {
 
     public void setParticipantsNumberLimit(Integer participantsNumberLimit) {
         this.participantsNumberLimit = participantsNumberLimit;
+    }
+    // Get enrolments
+    public List<EnrolmentDto> getEnrolments() {
+        return enrolments;
+    }
+    // Add and remove enrolments
+    public void addEnrolment(EnrolmentDto enrolment) {
+        this.enrolments.add(enrolment);
+    }
+    public void removeEnrolment(EnrolmentDto enrolment) {
+        this.enrolments.remove(enrolment);
     }
 
     @Override
