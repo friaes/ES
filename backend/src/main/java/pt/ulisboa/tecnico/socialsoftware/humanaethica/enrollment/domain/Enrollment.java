@@ -1,7 +1,5 @@
 package pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.domain;
 
-import org.apache.tools.ant.taskdefs.Local;
-import org.checkerframework.checker.units.qual.min;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +7,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentD
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
+
+import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
 
 @Entity
 @Table(name = "enrollment")
@@ -34,21 +34,12 @@ public class Enrollment {
     public Enrollment() {
     }
 
-    public Enrollment(EnrollmentDto enrollmentDto, Volunteer volunteer, Activity activity) {
+    public Enrollment(Activity activity, Volunteer volunteer, EnrollmentDto enrollmentDto) {
         setVolunteer(volunteer);
         setActivity(activity);
         setMotivation(enrollmentDto.getMotivation());
         setEnrollmentDate(LocalDateTime.now());
         verifyInvariants();
-    }
-
-    public void update(EnrollmentDto enrollmentDto, Volunteer volunteer, Activity activity) {
-        setVolunteer(volunteer);
-        setActivity(activity);
-        setMotivation(enrollmentDto.getMotivation());
-        setEnrollmentDate(LocalDateTime.now());
-        verifyInvariants();
-
     }
 
     public Integer getId() {
