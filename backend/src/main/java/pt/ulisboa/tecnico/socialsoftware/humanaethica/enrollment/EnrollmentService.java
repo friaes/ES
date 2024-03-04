@@ -28,6 +28,7 @@ public class EnrollmentService {
     @Autowired
     UserRepository userRepository;
 
+    //um voluntário pode inscrever-se numa atividade
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public EnrollmentDto registerEnrollment(Integer userId, Integer activityId, EnrollmentDto enrollmentDto) {
         if (userId == null) throw new HEException(USER_NOT_FOUND);
