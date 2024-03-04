@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.domain.Enrollment;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 
@@ -40,8 +41,8 @@ public class Activity {
     private Institution institution;
     
     //Add the relationship between the activity and the enrolments
-    @oneToMany
-    private List<Enrolment> enrolments = new ArrayList<>();
+    @OneToMany
+    private List<Enrollment> enrollments = new ArrayList<>();
 
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
@@ -321,15 +322,15 @@ public class Activity {
         }
     }
     //Add the methods to manage the enrolments
-    private void addEnrolment(Enrolment enrolment) {
-        this.enrolments.add(enrolment);
+    private void addEnrolment(Enrollment enrollment) {
+        this.enrollments.add(enrollment);
     }
     //Remove the enrolment from the list
-    private void removeEnrolment(Enrolment enrolment) {
-        this.enrolments.remove(enrolment);
+    private void removeEnrolment(Enrollment enrollment) {
+        this.enrollments.remove(enrollment);
     }
     //Get the list of enrolments
-    private List<Enrolment> getEnrolments() {
-        return this.enrolments;
+    private List<Enrollment> getEnrollments() {
+        return this.enrollments;
     }
 }

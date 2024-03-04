@@ -2,7 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain;
 
 import jakarta.persistence.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser;
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.domain.Enrollment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,10 @@ import java.util.List;
 @Entity
 @DiscriminatorValue(User.UserTypes.VOLUNTEER) 
 public class Volunteer extends User {
-    //Add the relationship between the volunteer and the activities
-    @oneToMany
-    private List<Activity> activities = new ArrayList<>();
+
+    //Add the relationship between the volunteer and the enrollments
+    @OneToMany
+    private List<Enrollment> enrollments = new ArrayList<>();
     
     public Volunteer() {
     }
@@ -24,12 +25,14 @@ public class Volunteer extends User {
     public Volunteer(String name, State state) {
         super(name, Role.VOLUNTEER, state);
     }
-    //Add the getter for the activities
-    public List<Activity> getActivities() {
-        return activities;
+
+    //Add getter for the enrollments
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
     }
-    //Add setter for the activities
-    public void addActivity(List<Activity> activities) {
-        this.activities = activities;
+    
+    //Add method to add an enrollment to the list
+    public void addEnrollment(Enrollment enrollment) {
+        enrollments.add(enrollment);
     }
 }

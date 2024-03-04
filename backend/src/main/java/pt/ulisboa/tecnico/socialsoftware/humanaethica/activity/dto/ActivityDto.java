@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto;
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.dto.InstitutionDto;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 
@@ -20,7 +21,7 @@ public class ActivityDto {
     private String creationDate;
     private List<ThemeDto> themes;
     private InstitutionDto institution;
-    private List<EnrolmentDto> enrolments;
+    private List<EnrollmentDto> enrollments;
 
     public ActivityDto(){
     }
@@ -141,15 +142,15 @@ public class ActivityDto {
         this.participantsNumberLimit = participantsNumberLimit;
     }
     // Get enrolments
-    public List<EnrolmentDto> getEnrolments() {
-        return enrolments;
+    public List<EnrollmentDto> getEnrollments() {
+        return enrollments;
     }
     // Add and remove enrolments
-    public void addEnrolment(EnrolmentDto enrolment) {
-        this.enrolments.add(enrolment);
+    public void addEnrolment(EnrollmentDto enrollment) {
+        this.enrollments.add(enrollment);
     }
-    public void removeEnrolment(EnrolmentDto enrolment) {
-        this.enrolments.remove(enrolment);
+    public void removeEnrolment(EnrollmentDto enrollment) {
+        this.enrollments.remove(enrollment);
     }
 
     @Override

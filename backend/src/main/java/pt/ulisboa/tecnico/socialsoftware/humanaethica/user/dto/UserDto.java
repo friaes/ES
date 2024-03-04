@@ -5,6 +5,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User.Role;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto;
+
+import java.util.List;
 
 public class UserDto {
     private Integer id;
@@ -28,11 +31,11 @@ public class UserDto {
     private String creationDate;
 
     private String lastAccess;
+
+    //add the enrollment list
+    private List<EnrollmentDto> enrollments;
     
     private boolean hasDocument;
-    //Add the relationship between the user and the enrolments
-    private List<EnrolmentDto> enrolments = new ArrayList<>();
-
     public UserDto() {
     }
 
@@ -159,11 +162,17 @@ public class UserDto {
     public void setHasDocument(boolean hasDocument) {
         this.hasDocument = hasDocument;
     }
-    //Add the getter for the enrolments
-    public List<EnrolmentDto> getEnrolments() {
-        return enrolments;
+
+    //add getter and setter for the enrollments
+    public List<EnrollmentDto> getEnrollments() {
+        return enrollments;
     }
-    public addEnrolment(EnrolmentDto enrolment) {
-        this.enrolments.add(enrolment);
+
+    public void setEnrollments(List<EnrollmentDto> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    public void addEnrollment(EnrollmentDto enrollment) {
+        this.enrollments.add(enrollment);
     }
 }
