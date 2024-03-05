@@ -23,8 +23,8 @@ public class ParticipationController {
     //um membro pode associar um voluntário a uma atividade
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_MEMBER')")
-    public ParticipationDto createParticipation(@PathVariable Integer volunteerId, @PathVariable Integer activityId, @Valid @RequestBody ParticipationDto participationDto){
-        return participationService.createParticipation(volunteerId, activityId, participationDto);
+    public ParticipationDto createParticipation(@PathVariable Integer activityId, @Valid @RequestBody ParticipationDto participationDto){
+        return participationService.createParticipation(activityId, participationDto);
     }
 
     //TODO 2nd feature
