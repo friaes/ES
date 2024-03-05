@@ -94,24 +94,24 @@ public class Participation {
     }
 
     public void verifyInvariants() {
-        checkActivityLimit();
-        checkDuplicatedParticipation();
-        checkApplicationDeadline();
+        participationsLimitReached();
+        duplicatedParticipation();
+        acceptanceBeforeApplication();
     }
 
-    private void checkActivityLimit() {
+    private void participationsLimitReached() {
         if (activity.getParticipations().size() + 1 > activity.getParticipantsNumberLimit()) {
             throw new HEException(PARTICIPATION_EXCEEDS_ACTIVITY_LIMIT);
         }
     }
 
-    private void checkDuplicatedParticipation() {
-        if (activity.getParticipations().contains(this)) {
+    private void duplicatedParticipation() {
+        if (volunteer.getParticipations().stream().anyMatch(e -> e.getActivity().equals(activity))) {
             throw new HEException(PARTICIPATION_DUPLICATE);
         }
     }
 
-    private void checkApplicationDeadline() {
+    private void acceptanceBeforeApplication() {
         if (acceptanceDate.isBefore(activity.getApplicationDeadline())) {
             throw new HEException(PARTICIPATION_BEFORE_APPLICATION_END);
         }
