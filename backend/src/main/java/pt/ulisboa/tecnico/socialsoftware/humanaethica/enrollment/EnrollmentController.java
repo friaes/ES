@@ -22,18 +22,17 @@ public class EnrollmentController {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentController.class);
 
     //um voluntário pode inscrever-se numa atividade
-    @PostMapping()
+    @PostMapping("/{activityId}/create")
     @PreAuthorize("hasRole('ROLE_VOLUNTEER')")
-    public EnrollmentDto registerEnrollment(Principal principal, @PathVariable Integer activityId, @Valid @RequestBody EnrollmentDto enrollmentDto){
+    public EnrollmentDto createEnrollment(Principal principal, @PathVariable Integer activityId, @Valid @RequestBody EnrollmentDto enrollmentDto){
         int userId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
-        return enrollmentService.registerEnrollment(userId, activityId, enrollmentDto);
+        return enrollmentService.createEnrollment(userId, activityId, enrollmentDto);
     }
 
     //um membro de uma instituição pode ver uma lista de todas as inscrições feitas numa atividade da sua instituição
-    @GetMapping()
+    @GetMapping("/{activityId}")
     @PreAuthorize("hasRole('ROLE_MEMBER')")
-    public List<EnrollmentDto> getEnrollmentsByActivity(Principal principal, @PathVariable Integer volunteerId, @PathVariable Integer activityId){
-        int userId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
-        return enrollmentService.getEnrollmentsByActivity(userId, volunteerId, activityId);
+    public List<EnrollmentDto> getActivityEnrollments(@PathVariable Integer activityId){
+        return enrollmentService.getEnrollmentsByActivity(activityId);
     }
 }

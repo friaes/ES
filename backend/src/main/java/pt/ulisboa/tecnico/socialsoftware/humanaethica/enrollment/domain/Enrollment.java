@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
 
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
@@ -38,7 +39,7 @@ public class Enrollment {
         setVolunteer(volunteer);
         setActivity(activity);
         setMotivation(enrollmentDto.getMotivation());
-        setEnrollmentDate(LocalDateTime.now());
+        setEnrollmentDate(DateHandler.toLocalDateTime(enrollmentDto.getEnrollmentDate()));
         verifyInvariants();
     }
 
@@ -92,13 +93,18 @@ public class Enrollment {
 
     //um voluntário só pode estar inscrito uma vez numa atividade
     private void onlyOneEnrollmentPerActivity() {
-        if (volunteer.getEnrollments().stream().anyMatch(e -> e.getActivity().equals(activity))) {
-            throw new HEException(VOLUNTERR_ALREADY_ENROLLED_IN_ACTIVITY);
+        if (this.volunteer.getEnrollments()==null) {
+            return;
+        }
+        for (Enrollment enrollment : this.volunteer.getEnrollments()) {
+            if (enrollment.getActivity().equals(this.activity)) {
+                throw new HEException(VOLUNTERR_ALREADY_ENROLLED_IN_ACTIVITY);
+            }
         }
     }
 
     private void enrollmentDateBeforeAcDate() {
-        if (enrollmentDate.isAfter(activity.getEndingDate())) {
+        if (this.enrollmentDate.isAfter(this.activity.getApplicationDeadline())) {
             throw new HEException(ENROLLMENT_DATE_AFTER_ACTIVITY_DATE);
         }
     }

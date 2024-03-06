@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>{
 
-    @Query("SELECT e FROM Enrollment e WHERE e.volunteer = :volunteer")
-    List<Enrollment> findEnrollmentsByVolunteer(Volunteer volunteer);
+    @Query("SELECT e FROM Enrollment e WHERE e.volunteer.id = :volunteerId")
+    List<Enrollment> findEnrollmentsByVolunteer(Integer volunteerId);
 
-    @Query("SELECT e FROM Enrollment e WHERE e.activity = :activity")
-    List<Enrollment> findEnrollmentsByActivity(Activity activity);
+    @Query("SELECT e FROM Enrollment e WHERE e.activity.id = :activityId")
+    List<Enrollment> findEnrollmentsByActivity(Integer  activityId);
 }

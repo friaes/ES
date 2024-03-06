@@ -12,7 +12,7 @@ import java.util.List;
 public class Volunteer extends User {
 
     //Add the relationship between the volunteer and the enrollments
-    @OneToMany
+    @OneToMany(mappedBy = "volunteer", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Enrollment> enrollments = new ArrayList<>();
     
     public Volunteer() {

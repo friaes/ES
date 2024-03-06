@@ -37,11 +37,11 @@ public class Activity {
     @JoinTable(name = "activity_themes")
     private List<Theme> themes = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne 
     private Institution institution;
     
     //Add the relationship between the activity and the enrolments
-    @OneToMany
+    @OneToMany(mappedBy = "activity", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Enrollment> enrollments = new ArrayList<>();
 
     @Column(name = "creation_date")

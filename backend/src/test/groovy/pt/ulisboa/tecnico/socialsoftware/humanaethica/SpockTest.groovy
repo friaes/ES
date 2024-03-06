@@ -15,7 +15,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoUtils
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserApplicationalService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.repository.UserRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.InstitutionService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.repository.InstitutionRepository
@@ -25,6 +27,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.repository.ThemeRepo
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.Mailer
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.EnrollmentService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.repository.EnrollmentRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -168,6 +173,17 @@ class SpockTest extends Specification {
         return member
     }
 
+    def createVolunteer(name, userName, email, type, state){
+        def volunteer = new Volunteer(name, userName, email, type, state)
+        volunteer.getAuthUser().setPassword(passwordEncoder.encode(password))
+        userRepository.save(volunteer)
+        return volunteer
+    }
+
+    def createUserDto(){
+        def userDto = new UserDto()
+    }
+
     // theme
 
     public static final String THEME_NAME_1 = "THEME_NAME 1"
@@ -225,5 +241,19 @@ class SpockTest extends Specification {
         themeRepository.deleteAll()
     }
 
+    // enrollments
+    protected def createEnrollmentDto(activity, volunteer, date, motivation) {
+        def enrollmentDto = new EnrollmentDto()
+        enrollmentDto.setActivity(activity)
+        enrollmentDto.setVolunteer(volunteer)
+        enrollmentDto.setEnrollmentDate(DateHandler.toISOString(date))
+        enrollmentDto.setMotivation(motivation)
+        enrollmentDto
+    }
+    @Autowired
+    EnrollmentService enrollmentService
+
+    @Autowired
+    EnrollmentRepository enrollmentRepository
 
 }

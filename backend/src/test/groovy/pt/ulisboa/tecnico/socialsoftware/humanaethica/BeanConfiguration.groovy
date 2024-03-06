@@ -19,6 +19,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.Mailer
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.EnrollmentService
 
 @TestConfiguration
 @PropertySource("classpath:application-test.properties")
@@ -119,5 +120,10 @@ class BeanConfiguration {
         props.put("mail.debug", debug);
 
         return mailSender;
+    }
+
+    @Bean
+    EnrollmentService enrollmentService() {
+        return new EnrollmentService()
     }
 }
