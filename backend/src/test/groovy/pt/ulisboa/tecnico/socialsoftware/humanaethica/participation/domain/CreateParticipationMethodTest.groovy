@@ -96,8 +96,11 @@ class CreateParticipationMethodTest extends SpockTest {
     @Unroll
     def "create participation violate date precedence invariants: acceptance=#acceptance"() {
         given:
+        otherParticipation.getActivity() >> activity
         activity.getParticipantsNumberLimit() >> 2
         activity.getApplicationDeadline() >> NOW
+        activity.getParticipations() >> [otherParticipation]
+        volunteer.getParticipations() >> []
         
         and: "a participation dto"
         participationDto = new ParticipationDto()

@@ -112,7 +112,7 @@ public class Participation {
     }
 
     private void acceptanceBeforeApplication() {
-        if (acceptanceDate.isBefore(activity.getApplicationDeadline())) {
+        if (!acceptanceDate.isAfter(activity.getApplicationDeadline())) {
             throw new HEException(PARTICIPATION_BEFORE_APPLICATION_END);
         }
     }
