@@ -6,12 +6,21 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.RegisterUserDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
+
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto
+
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto
+
+
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import spock.lang.Unroll
@@ -32,25 +41,27 @@ class CreateParticipationServiceTest extends SpockTest {
     def setup() {
         member = authUserService.loginDemoMemberAuth().getUser()
 
-        def userDto = new RegisterUserDto()
-        userDto.setUsername(USER_1_USERNAME)
-        userDto.setEmail(USER_1_EMAIL)
-        userDto.setRole(User.Role.VOLUNTEER)
-        volunteer = userService.registerUser(userDto, null);
-        userRepository.save(volunteer)
+        def volunteerDto = new RegisterUserDto()
+        volunteerDto.setUsername(USER_1_USERNAME)
+        volunteerDto.setEmail(USER_1_EMAIL)
+        volunteerDto.setRole(User.Role.VOLUNTEER)
+        volunteer = userService.registerUser(volunteerDto, null);
 
         def institution = institutionService.getDemoInstitution()
+    
+        theme = new Theme(THEME_NAME_1, Theme.State.APPROVED,null)
+        themeRepository.save(theme)
+        def themesDto = new ArrayList<>()
+        themesDto.add(new ThemeDto(theme,false,false,false))
+
         def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
-                ONE_DAY_AGO,IN_ONE_DAY,IN_THREE_DAYS,null)  
-        def themes = new ArrayList<>()
-        themes.add(createTheme(THEME_NAME_1,Theme.State.APPROVED,null))
-        activity = new Activity(activityDto, institution, themes)
+                ONE_DAY_AGO,IN_ONE_DAY,IN_THREE_DAYS,themesDto)  
+        activity = activityService.registerActivity(member.getId(), activityDto)
 
-        activityRepository.save(activity)     
     }
-
+    
     def "create participation"() {
-        def participationDto = createParticipationDto(userDto, 1, NOW)
+        def participationDto = createParticipationDto(volunteer.getId(), 1, NOW)
 
         when:
         def result = participationService.createParticipation(activity.getId(), participationDto)

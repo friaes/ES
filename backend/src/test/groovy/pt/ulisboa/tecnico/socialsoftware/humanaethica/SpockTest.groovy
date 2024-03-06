@@ -216,11 +216,14 @@ class SpockTest extends Specification {
         activityDto
     }
 
-    protected ParticipationDto createParticipationDto(userDto, rating, acceptance) {
+    protected ParticipationDto createParticipationDto(volunteerId, rating, acceptance) {
+         println "volunteerId: ${volunteerId}, rating: ${rating}, acceptance: ${acceptance}"
+
         def participationDto = new ParticipationDto()
-        participationDto.setVolunteer(userDto)
+        participationDto.setVolunteerId(volunteerId)
         participationDto.setRating(rating)
-        activityDto.setAcceptanceDate(acceptance)
+        participationDto.setAcceptanceDate(DateHandler.toISOString(acceptance))
+        participationDto
     }
 
     // clean database
