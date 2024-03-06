@@ -9,6 +9,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.AuthUserService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.dto.AuthDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.dto.AuthPasswordDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.repository.AuthUserRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoUtils
@@ -22,6 +23,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.repository.Ins
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.ActivityRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.ActivityService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.repository.ThemeRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.ParticipationService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.Mailer
@@ -107,9 +109,6 @@ class SpockTest extends Specification {
 
     @Autowired
     DemoUtils demoUtils
-
-    @Autowired
-
 
     def demoVolunteerLogin() {
         def result = webClient.get()
@@ -215,6 +214,13 @@ class SpockTest extends Specification {
         activityDto.setApplicationDeadline(DateHandler.toISOString(deadline))
         activityDto.setThemes(themesDto)
         activityDto
+    }
+
+    protected ParticipationDto createParticipationDto(userDto, rating, acceptance) {
+        def participationDto = new ParticipationDto()
+        participationDto.setVolunteer(userDto)
+        participationDto.setRating(rating)
+        activityDto.setAcceptanceDate(acceptance)
     }
 
     // clean database
