@@ -31,6 +31,27 @@ class CreateParticipationMethodTest extends SpockTest {
         participationDto.acceptanceDate = DateHandler.toISOString(IN_ONE_DAY)
     }
 
+    def "create participation with volunteer and activity has another participation"() {
+        given:
+        otherParticipation.getActivity() >> activity
+        activity.getParticipantsNumberLimit() >> 2
+        activity.getApplicationDeadline() >> NOW
+        activity.getParticipations() >> [otherParticipation]
+        volunteer.getParticipations() >> []
+        
+        when:
+        def result = new Participation(activity, volunteer, participationDto)
+
+        then: "check result"
+        result.getActivity() == activity
+        result.getVolunteer() == volunteer
+        result.getRating() == 1
+        result.getAcceptanceDate() == IN_ONE_DAY
+        and: "invocations"
+        1 * activity.addParticipation(_)
+        1 * volunteer.addParticipation(_)
+    }
+
     @Unroll
     def "create participation and violate limit number of participantions"() {
         given:
