@@ -38,7 +38,7 @@ public class Activity {
     private List<Theme> themes = new ArrayList<>();
 
     //CHECK IN CLASS
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "activity", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "activity", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Participation> participations = new ArrayList<>();
 
     @ManyToOne

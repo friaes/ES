@@ -219,9 +219,9 @@ class SpockTest extends Specification {
         activityDto
     }
 
-    protected ParticipationDto createParticipationDto(volunteerId, rating, acceptance) {
+    protected ParticipationDto createParticipationDto(volunteerId, acceptance, rating) {
         //Volunteer volunteer = userRepository.findById(volunteerId)
-        //println "volunteerId: ${volunteer.getParticipations()}, rating: ${rating}, acceptance: ${acceptance}"
+        //println "volunteerId: ${volunteer.getParticipations()}, acceptance: ${acceptance}, rating: ${rating},"
 
         def participationDto = new ParticipationDto()
         participationDto.setVolunteerId(volunteerId)

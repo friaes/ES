@@ -12,10 +12,8 @@ import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMes
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.PARTICIPATION_EXCEEDS_ACTIVITY_LIMIT;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto;
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme;
 
 
 @Entity
