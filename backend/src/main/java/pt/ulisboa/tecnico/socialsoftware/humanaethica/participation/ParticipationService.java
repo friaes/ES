@@ -28,8 +28,10 @@ public class ParticipationService {
     //um voluntário pode inscrever-se numa atividade
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public ParticipationDto createParticipation(Integer activityId, ParticipationDto participationDto) {
+
         Integer volunteerId = participationDto.getVolunteer().getId();
         if (volunteerId == null) throw new HEException(USER_NOT_FOUND);
+
         Volunteer volunteer = (Volunteer) userRepository.findById(volunteerId).orElseThrow(() -> new HEException(USER_NOT_FOUND, volunteerId));
         Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new HEException(ACTIVITY_NOT_FOUND, activityId));
 
@@ -40,7 +42,7 @@ public class ParticipationService {
         return new ParticipationDto(participation);
     }
 
-    
+
     //TODO 2nd feature
 
 

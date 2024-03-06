@@ -21,6 +21,9 @@ public class DemoUtils {
 
     public static String DEMO_INSTITUTION = "DEMO INSTITUTION";
 
+    public static String DEMO_ACTIVITY = "DEMO ACTIVITY";
+
+
     @Autowired
     Environment environment;
 

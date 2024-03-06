@@ -120,4 +120,11 @@ class BeanConfiguration {
 
         return mailSender;
     }
+
+    @Bean
+    ParticipationService participationService(){
+        return new ParticipationService();
+    }
+
+
 }

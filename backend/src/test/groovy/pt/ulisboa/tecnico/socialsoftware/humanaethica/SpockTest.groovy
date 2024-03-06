@@ -108,6 +108,9 @@ class SpockTest extends Specification {
     @Autowired
     DemoUtils demoUtils
 
+    @Autowired
+
+
     def demoVolunteerLogin() {
         def result = webClient.get()
                 .uri('/auth/demo/volunteer')
@@ -225,5 +228,7 @@ class SpockTest extends Specification {
         themeRepository.deleteAll()
     }
 
+    @Autowired
+    ParticipationService participationService
 
 }

@@ -9,6 +9,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.repository.InstitutionRepository;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.ActivityRepository;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoUtils;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.repository.ThemeRepository;
@@ -110,4 +111,13 @@ public class ActivityService {
         return new ActivityDto(activity, true);
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public Activity getDemoActivity() {
+        return activityRepository.findActivityByName(DemoUtils.DEMO_ACTIVITY).orElseGet(() -> {
+            ActivityDto activityDto = new ActivityDto();
+            activity.validate();
+            activityRepository.save(activity);
+            return ;
+        });
+    }
 }
