@@ -49,9 +49,10 @@ public enum ErrorMessage {
     // Participation
     PARTICIPATION_EXCEEDS_ACTIVITY_LIMIT("Number of participations exceeded"),
     PARTICIPATION_DUPLICATE("Volunteer is already participating in this activity"),
-    PARTICIPATION_BEFORE_APPLICATION_END("Application period is still ongoing");
+    PARTICIPATION_BEFORE_APPLICATION_END("Application period is still ongoing"),
 
 
+    ASSESSMENT_REVIEW_TO_SHORT("The assessment must have at least 10 characters");
 
     public final String label;
 
