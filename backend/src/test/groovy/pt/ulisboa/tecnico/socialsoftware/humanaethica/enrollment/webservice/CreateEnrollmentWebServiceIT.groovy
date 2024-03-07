@@ -28,7 +28,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.EnrollmentServi
 import java.util.ArrayList
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class createEnrollmentWebServiceIT extends SpockTest {
+class CreateEnrollmentWebServiceIT extends SpockTest {
     @LocalServerPort
     private int port
 
