@@ -51,8 +51,8 @@ public enum ErrorMessage {
     PARTICIPATION_DUPLICATE("Volunteer is already participating in this activity"),
     PARTICIPATION_BEFORE_APPLICATION_END("Application period is still ongoing"),
 
-
-    ASSESSMENT_REVIEW_TO_SHORT("The assessment must have at least 10 characters");
+    ASSESSMENT_REVIEW_TO_SHORT("The assessment must have at least 10 characters"),
+    ASSESSMENT_ALREADY_CREATED("You can only assess each institution once");
 
     public final String label;
 
