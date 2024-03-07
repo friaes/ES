@@ -35,7 +35,9 @@ public class Assessment {
         setVolunteer(volunteer);
         setInstitution(institution);
 
-
+        if (this.review == null || this.review.length() < 10) {
+            throw new HEException(ASSESSMENT_REVIEW_TO_SHORT);
+        }
     }
 
     public Assessment() {}
