@@ -17,6 +17,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserApplicationalService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.repository.UserRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.InstitutionService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.repository.InstitutionRepository
@@ -30,6 +31,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.Mailer
 import spock.lang.Specification
 
 import java.time.LocalDateTime
+import java.util.ArrayList;
+import java.util.List;
 
 class SpockTest extends Specification {
     // remote requests
@@ -217,7 +220,8 @@ class SpockTest extends Specification {
     }
 
     protected ParticipationDto createParticipationDto(volunteerId, rating, acceptance) {
-         println "volunteerId: ${volunteerId}, rating: ${rating}, acceptance: ${acceptance}"
+        //Volunteer volunteer = userRepository.findById(volunteerId)
+        //println "volunteerId: ${volunteer.getParticipations()}, rating: ${rating}, acceptance: ${acceptance}"
 
         def participationDto = new ParticipationDto()
         participationDto.setVolunteerId(volunteerId)

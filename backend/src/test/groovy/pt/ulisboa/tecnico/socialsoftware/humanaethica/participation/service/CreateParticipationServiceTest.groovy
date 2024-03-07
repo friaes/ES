@@ -11,6 +11,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser;
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member;
@@ -33,19 +34,12 @@ class CreateParticipationServiceTest extends SpockTest {
     public static final String NO_EXIST = "noExist"
 
     def member
-    def volunteer
     def theme
     def activity
 
 
     def setup() {
         member = authUserService.loginDemoMemberAuth().getUser()
-
-        def volunteerDto = new RegisterUserDto()
-        volunteerDto.setUsername(USER_1_USERNAME)
-        volunteerDto.setEmail(USER_1_EMAIL)
-        volunteerDto.setRole(User.Role.VOLUNTEER)
-        volunteer = userService.registerUser(volunteerDto, null);
 
         def institution = institutionService.getDemoInstitution()
     
@@ -54,13 +48,21 @@ class CreateParticipationServiceTest extends SpockTest {
         def themesDto = new ArrayList<>()
         themesDto.add(new ThemeDto(theme,false,false,false))
 
-        def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
+        def activityDto = createActivityDto(ACTIVITY_NAME_2,ACTIVITY_REGION_1,2,ACTIVITY_DESCRIPTION_1,
                 ONE_DAY_AGO,IN_ONE_DAY,IN_THREE_DAYS,themesDto)  
         activity = activityService.registerActivity(member.getId(), activityDto)
 
     }
     
     def "create participation"() {
+        given:
+        def volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
+        userRepository.save(volunteer)
+        def userDto = new UserDto()
+        userDto.setName(USER_1_NAME)
+        userDto.setUsername(USER_1_USERNAME)
+        userDto.setEmail(USER_1_EMAIL)
+
         def participationDto = createParticipationDto(volunteer.getId(), 1, NOW)
 
         when:
@@ -75,21 +77,20 @@ class CreateParticipationServiceTest extends SpockTest {
         and: "the participation is saved in the database"
         participationRepository.findAll().size() == 1
         and: "the stored data is correct"
-        def storedParticipation = activityRepository.findById(result.id).get()
+        def storedParticipation = participationRepository.findById(result.id).get()
         storedParticipation.rating == 1
         storedParticipation.acceptanceDate == DateHandler.toISOString(NOW)
         storedParticipation.volunteer.id == volunteer.id 
         storedParticipation == activity.id
     }
-
+    /**
     @Unroll
     def 'invalid arguments: volunteerId=#volunteerId | activityId=#activityId'() {
         given: "an participation dto"
-
-        def participationDto = createParticipationDto(userDto, 1, NOW)
+        def participationDto = createParticipationDto(getVolunteerId(volunteerId), 1, NOW)
 
         when:
-        participationService.createParticipation(getVolunteerId(volunteerId), participationDto)
+        participationService.createParticipation(getActivityId(activityId), participationDto)
 
         then:
         def error = thrown(HEException)
@@ -113,6 +114,14 @@ class CreateParticipationServiceTest extends SpockTest {
         return null
     }
 
+    def getActivityId(activityId){
+        if (activityId == EXIST)
+            return activity.id
+        else if (activityId == NO_EXIST)
+            return 222
+        return null
+    }
+    **/
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}
 }

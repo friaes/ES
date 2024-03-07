@@ -54,7 +54,6 @@ public class Participation {
     }
 
 
-
     public Integer getId() { return id; }
 
     public Integer getRating() { return rating; }
