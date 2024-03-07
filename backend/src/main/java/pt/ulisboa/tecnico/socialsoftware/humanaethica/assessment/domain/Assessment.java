@@ -10,6 +10,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
@@ -34,12 +35,14 @@ public class Assessment {
         setReviewDate(assessmentDto.getReviewDate());
         setVolunteer(volunteer);
         setInstitution(institution);
+        setId(assessmentDto.getId());
 
         if (this.review == null || this.review.length() < 10) {
             throw new HEException(ASSESSMENT_REVIEW_TO_SHORT);
         }
 
-        if (this.volunteer.getAssessments().stream().anyMatch(a -> Objects.equals(a.getInstitution().getId(), institution.getId()))) {
+        List<Assessment> assessments = this.volunteer.getAssessments();
+        if (assessments != null && assessments.stream().anyMatch(a -> Objects.equals(a.getInstitution().getId(), institution.getId()))) {
             throw new HEException(ASSESSMENT_ALREADY_CREATED);
         }
 
