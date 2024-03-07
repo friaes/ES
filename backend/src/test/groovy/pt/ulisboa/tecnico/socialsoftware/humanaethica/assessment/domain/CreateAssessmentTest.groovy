@@ -81,7 +81,7 @@ class CreateAssessmentTest extends SpockTest {
         otherAssessment.getInstitution() >> institution
         institution.getActivities() >> [activity]
         institution.getId() >> 0
-        volunteer.getAssessments() >> [otherAssessment]f
+        volunteer.getAssessments() >> [otherAssessment]
         activity.getState() >> Activity.State.APPROVED
 
         when: "create assessment"
