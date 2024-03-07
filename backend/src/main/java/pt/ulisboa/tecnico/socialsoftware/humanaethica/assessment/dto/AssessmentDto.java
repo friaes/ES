@@ -10,6 +10,8 @@ public class AssessmentDto {
     private String review;
     private LocalDateTime reviewDate;
 
+    public AssessmentDto() {}
+
     public AssessmentDto(Assessment a) {
         setReview(a.getReview());
         setReviewDate(a.getReviewDate());
