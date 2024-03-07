@@ -41,7 +41,8 @@ public enum ErrorMessage {
     ACTIVITY_ALREADY_SUSPENDED("Activity is already suspended with name %s"),
     ACTIVITY_ALREADY_REPORTED("Activity is already reported with name %s"),
 
-    ASSESSMENT_REVIEW_TO_SHORT("The assessment must have at least 10 characters");
+    ASSESSMENT_REVIEW_TO_SHORT("The assessment must have at least 10 characters"),
+    ASSESSMENT_ALREADY_CREATED("You can only assess each institution once");
 
     public final String label;
 

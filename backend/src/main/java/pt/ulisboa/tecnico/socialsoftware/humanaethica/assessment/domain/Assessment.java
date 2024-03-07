@@ -38,6 +38,10 @@ public class Assessment {
         if (this.review == null || this.review.length() < 10) {
             throw new HEException(ASSESSMENT_REVIEW_TO_SHORT);
         }
+
+        if (this.volunteer.getAssessments().stream().anyMatch(a -> Objects.equals(a.getInstitution().getId(), institution.getId()))) {
+            throw new HEException(ASSESSMENT_ALREADY_CREATED);
+        }
     }
 
     public Assessment() {}
