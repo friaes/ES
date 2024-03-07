@@ -11,6 +11,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 
 @DataJpaTest
 class CreateAssessmentTest extends SpockTest {
@@ -27,7 +28,6 @@ class CreateAssessmentTest extends SpockTest {
         assessmentDto = new AssessmentDto()
         assessmentDto.setReview("1234567890")
         assessmentDto.setId(0)
-        // assessmentDto.setReviewDate(LocalDateTime.now())
     }
 
     //create valid assessment - Done
@@ -62,7 +62,7 @@ class CreateAssessmentTest extends SpockTest {
         error.getErrorMessage() == ErrorMessage.ASSESSMENT_REVIEW_TO_SHORT
     }
 
-    def "at least one activity"() {
+    def "no finalized activity"() {
         given: "institution and volunteer"
         volunteer.getAssessments() >> []
         institution.getActivities() >> [activity]
@@ -74,6 +74,22 @@ class CreateAssessmentTest extends SpockTest {
         then: "execption is thrown"
         def error = thrown(HEException)
         error.getErrorMessage() == ErrorMessage.ASSESSMENT_HAS_NO_FINALIZED_ACTIVITY
+    }
+
+    def "Id"() {
+        when:
+        assessmentDto.setId(555)
+
+        then:
+        assessmentDto.getId() == 555
+    }
+
+    def "Dates"() {
+        when:
+        def now = DateHandler.now()
+        assessmentDto.setReviewDate(now)
+        then:
+        now.isEqual(assessmentDto.getReviewDate())
     }
 
     def "Assessment already created"() {
