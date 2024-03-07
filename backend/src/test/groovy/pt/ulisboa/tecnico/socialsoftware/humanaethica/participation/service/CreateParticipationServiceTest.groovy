@@ -5,7 +5,6 @@ import org.springframework.boot.test.context.TestConfiguration
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain.Participation
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.ParticipationService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
@@ -29,54 +28,56 @@ class CreateParticipationServiceTest extends SpockTest {
     public static final String NO_EXIST = "noExist"
 
     def member
+    def volunteer
     def activity
-    def activityDto
     def participation
     def institution
 
-
     def setup() {
         member = authUserService.loginDemoMemberAuth().getUser()
+        volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
+        userRepository.save(volunteer)
         
         institution = institutionService.getDemoInstitution()
         given: "activity info"
-        activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
-                                            IN_ONE_DAY,IN_TWO_DAYS,IN_THREE_DAYS,null)
+        def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
+                                            NOW,IN_TWO_DAYS,IN_THREE_DAYS,null)
         and: "a theme   "
         def themes = new ArrayList<>()
         themes.add(createTheme(THEME_NAME_1,Theme.State.APPROVED,null))
         and: "an activity"
         activity = new Activity(activityDto, institution, themes)
         activityRepository.save(activity)
-
-        
-
     }
     
     def "create participation"() {
         given: "participation info"
-        def volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
-        userRepository.save(volunteer)
-        def userDto = new UserDto()
-        userDto.setName(USER_1_NAME)
-        userDto.setUsername(USER_1_USERNAME)
-        userDto.setEmail(USER_1_EMAIL)
-        def participationDto = createParticipationDto(volunteer.getId(), NOW, 1)
+        def participationDto = createParticipationDto(volunteer.getId(), IN_ONE_DAY, 1)
+
         when: "create participation"
         def result = participationService.createParticipation(activity.getId(),participationDto)
 
         then: "participation is created"
         result != null
-        result.getRating() == 1
-        result.getVolunteer().getId() == volunteer.getId()
-        result.getActivity().getId() == activity.getId()
+        result.rating == 1
+        result.acceptanceDate == DateHandler.toISOString(IN_ONE_DAY)
+        result.volunteerId == volunteer.id
+        result.activityId == activity.id
+
+        and: "the participation is saved in the database"
+        participationRepository.findAll().size() == 1
+        and: "the stored data is correct"
+        def storedParticipation = participationRepository.findById(result.id).get()
+        storedParticipation.rating == 1
+        storedParticipation.acceptanceDate == IN_ONE_DAY
+        storedParticipation.volunteer.id == volunteer.id 
+        storedParticipation.activity.id == activity.id
     }
 
-    /**
     @Unroll
     def 'invalid arguments: volunteerId=#volunteerId | activityId=#activityId'() {
         given: "an participation dto"
-        def participationDto = createParticipationDto(getVolunteerId(volunteerId), 1, NOW)
+        def participationDto = createParticipationDto(getVolunteerId(volunteerId), IN_ONE_DAY, 1)
 
         when:
         participationService.createParticipation(getActivityId(activityId), participationDto)
@@ -110,7 +111,7 @@ class CreateParticipationServiceTest extends SpockTest {
             return 222
         return null
     }
-    **/
+
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}
 }

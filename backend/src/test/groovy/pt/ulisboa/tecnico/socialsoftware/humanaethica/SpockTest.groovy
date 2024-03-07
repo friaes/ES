@@ -25,6 +25,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.Activi
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.ActivityService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.repository.ThemeRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.ParticipationService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.repository.ParticipationRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.Mailer
@@ -219,10 +220,14 @@ class SpockTest extends Specification {
         activityDto
     }
 
-    protected ParticipationDto createParticipationDto(volunteerId, acceptance, rating) {
-        //Volunteer volunteer = userRepository.findById(volunteerId)
-        //println "volunteerId: ${volunteer.getParticipations()}, acceptance: ${acceptance}, rating: ${rating},"
+    @Autowired
+    ParticipationRepository participationRepository
 
+    @Autowired
+    ParticipationService participationService
+
+
+    protected ParticipationDto createParticipationDto(volunteerId, acceptance, rating) {
         def participationDto = new ParticipationDto()
         participationDto.setVolunteerId(volunteerId)
         participationDto.setRating(rating)
@@ -240,8 +245,4 @@ class SpockTest extends Specification {
         institutionRepository.deleteAll()
         themeRepository.deleteAll()
     }
-
-    @Autowired
-    ParticipationService participationService
-
 }
