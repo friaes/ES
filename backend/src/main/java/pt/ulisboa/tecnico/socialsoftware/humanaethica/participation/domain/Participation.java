@@ -17,7 +17,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.Particip
 
 
 @Entity
-@Table(name = "participations")
+@Table(name = "Participation")
 public class Participation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,6 @@ public class Participation {
 
     private Integer rating;
 
-    @Column(name = "acceptance_date")
     private LocalDateTime acceptanceDate;
 
     @ManyToOne

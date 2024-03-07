@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.SpockTest
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto
@@ -15,11 +16,13 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class createParticipationWebServiceIT extends SpockTest {
+class CreateParticipationWebServiceIT extends SpockTest {
     @LocalServerPort
     private int port
 
     def participationDto
+    def activityId
+    def volunteerId
 
     def setup() {
         deleteAll()
@@ -28,115 +31,121 @@ class createParticipationWebServiceIT extends SpockTest {
         headers = new HttpHeaders()
         headers.setContentType(MediaType.APPLICATION_JSON)
 
+        def user = demoMemberLogin()
+        def volunteer = authUserService.loginDemoVolunteerAuth().getUser()
+        volunteerId = volunteer.id
         
+        def theme = createTheme(THEME_NAME_1, Theme.State.APPROVED,null)
+        def themesDto = new ArrayList<>()
+        themesDto.add(new ThemeDto(theme,false,false,false))
 
-        //participationDto = createParticipationDto(volunteer.getId(), 1, NOW)
+        def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,2,ACTIVITY_DESCRIPTION_1,
+                NOW,IN_TWO_DAYS,IN_THREE_DAYS,themesDto)
+
+        def activity = activityService.registerActivity(user.id, activityDto)
+        
+        activityId = activity.id
+
+        participationDto = createParticipationDto(volunteer.getId(), IN_ONE_DAY, 1)
     }
-/**
-    def "login as member, and create an activity"() {
+
+    def "login as member, and create a participation"() {
         given:
         demoMemberLogin()
 
         when:
         def response = webClient.post()
-                .uri('/activities')
+                .uri('/participations/' + activityId + '/create')
                 .headers(httpHeaders -> httpHeaders.putAll(headers))
-                .bodyValue(activityDto)
+                .bodyValue(participationDto)
                 .retrieve()
-                .bodyToMono(ActivityDto.class)
+                .bodyToMono(ParticipationDto.class)
                 .block()
 
         then: "check response data"
-        response.name == ACTIVITY_NAME_1
-        response.region == ACTIVITY_REGION_1
-        response.participantsNumberLimit == 2
-        response.description == ACTIVITY_DESCRIPTION_1
-        response.startingDate == DateHandler.toISOString(IN_TWO_DAYS)
-        response.endingDate == DateHandler.toISOString(IN_THREE_DAYS)
-        response.applicationDeadline == DateHandler.toISOString(IN_ONE_DAY)
-        response.themes.get(0).getName() == THEME_NAME_1
+        response != null
+        response.rating == 1
+        response.acceptanceDate == DateHandler.toISOString(IN_ONE_DAY)
+        response.getVolunteerId() == volunteerId
+        response.getActivityId() == activityId
         and: 'check database data'
-        activityRepository.count() == 1
-        def activity = activityRepository.findAll().get(0)
-        activity.getName() == ACTIVITY_NAME_1
-        activity.getRegion() == ACTIVITY_REGION_1
-        activity.getParticipantsNumberLimit() == 2
-        activity.getDescription() == ACTIVITY_DESCRIPTION_1
-        activity.getStartingDate().withNano(0) == IN_TWO_DAYS.withNano(0)
-        activity.getEndingDate().withNano(0) == IN_THREE_DAYS.withNano(0)
-        activity.getApplicationDeadline().withNano(0) == IN_ONE_DAY.withNano(0)
-        activity.themes.get(0).getName() == THEME_NAME_1
-
+        participationRepository.count() == 1
+        def participation = participationRepository.findAll().get(0)
+        participation != null
+        participation.rating == 1
+        participation.acceptanceDate.withNano(0) == IN_ONE_DAY.withNano(0)
+        participation.getVolunteer().getId() == volunteerId
+        participation.getActivity().getId() == activityId
         cleanup:
         deleteAll()
     }
 
-    def "login as member, and create an activity with error"() {
+    def "login as member, and create a participation with error"() {
         given: 'a member'
         demoMemberLogin()
-        and: 'a name with blanks'
-        activityDto.name = "  "
+        and: 'acceptance not after deadline'
+        participationDto.acceptanceDate = DateHandler.toISOString(NOW)
 
-        when: 'the member registers the activity'
-        webClient.post()
-                .uri('/activities')
+        when:
+        def response = webClient.post()
+                .uri('/participations/' + activityId + '/create')
                 .headers(httpHeaders -> httpHeaders.putAll(headers))
-                .bodyValue(activityDto)
+                .bodyValue(participationDto)
                 .retrieve()
-                .bodyToMono(ActivityDto.class)
+                .bodyToMono(ParticipationDto.class)
                 .block()
 
         then: "check response status"
         def error = thrown(WebClientResponseException)
         error.statusCode == HttpStatus.BAD_REQUEST
-        activityRepository.count() == 0
+        participationRepository.count() == 0
 
         cleanup:
         deleteAll()
     }
 
-    def "login as volunteer, and create an activity"() {
+    def "login as volunteer, and create a participation"() {
         given: 'a volunteer'
         demoVolunteerLogin()
 
-        when: 'the volunteer registers the activity'
+        when:
         webClient.post()
-                .uri('/activities')
-                .headers(httpHeaders -> httpHeaders.putAll(headers))
-                .bodyValue(activityDto)
-                .retrieve()
-                .bodyToMono(ActivityDto.class)
-                .block()
+            .uri('/participations/' + activityId + '/create')
+            .headers(httpHeaders -> httpHeaders.putAll(headers))
+            .bodyValue(participationDto)
+            .retrieve()
+            .bodyToMono(ParticipationDto.class)
+            .block()
 
         then: "an error is returned"
+        participationRepository.count() == 0
         def error = thrown(WebClientResponseException)
         error.statusCode == HttpStatus.FORBIDDEN
-        activityRepository.count() == 0
 
         cleanup:
         deleteAll()
     }
 
-    def "login as admin, and create an activity"() {
+    def "login as admin, and create participation"() {
         given: 'a demo'
         demoAdminLogin()
 
-        when: 'the admin registers the activity'
+        when:
         webClient.post()
-                .uri('/activities')
-                .headers(httpHeaders -> httpHeaders.putAll(headers))
-                .bodyValue(activityDto)
-                .retrieve()
-                .bodyToMono(ActivityDto.class)
-                .block()
+            .uri('/participations/' + activityId + '/create')
+            .headers(httpHeaders -> httpHeaders.putAll(headers))
+            .bodyValue(participationDto)
+            .retrieve()
+            .bodyToMono(ParticipationDto.class)
+            .block()
 
         then: "an error is returned"
         def error = thrown(WebClientResponseException)
         error.statusCode == HttpStatus.FORBIDDEN
-        activityRepository.count() == 0
+        participationRepository.count() == 0
 
         cleanup:
         deleteAll()
     }
-**/
+
 }
