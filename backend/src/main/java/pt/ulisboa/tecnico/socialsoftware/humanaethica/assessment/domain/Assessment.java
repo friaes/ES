@@ -42,6 +42,10 @@ public class Assessment {
         if (this.volunteer.getAssessments().stream().anyMatch(a -> Objects.equals(a.getInstitution().getId(), institution.getId()))) {
             throw new HEException(ASSESSMENT_ALREADY_CREATED);
         }
+
+        if (institution.getActivities().stream().noneMatch(a -> a.getState() == Activity.State.APPROVED)) {
+            throw new HEException(ASSESSMENT_HAS_NO_FINALIZED_ACTIVITY, institution.getName());
+        }
     }
 
     public Assessment() {}
