@@ -31,18 +31,17 @@ class CreateParticipationServiceTest extends SpockTest {
     def volunteer
     def activity
     def participation
-    def institution
+    
 
     def setup() {
-        member = authUserService.loginDemoMemberAuth().getUser()
-        volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
-        userRepository.save(volunteer)
+        volunteer = authUserService.loginDemoVolunteerAuth().getUser()
         
-        institution = institutionService.getDemoInstitution()
         given: "activity info"
         def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
                                             NOW,IN_TWO_DAYS,IN_THREE_DAYS,null)
-        and: "a theme   "
+        and: "a instituition"
+        def institution = institutionService.getDemoInstitution()
+        and: "a theme"
         def themes = new ArrayList<>()
         themes.add(createTheme(THEME_NAME_1,Theme.State.APPROVED,null))
         and: "an activity"
