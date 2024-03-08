@@ -38,7 +38,7 @@ public class Assessment {
         setInstitution(institution);
         setId(assessmentDto.getId());
 
-        if (this.review == null || this.review.length() < 10) {
+        if (this.review.length() < 10) {
             throw new HEException(ASSESSMENT_REVIEW_TO_SHORT);
         }
 
