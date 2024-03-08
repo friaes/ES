@@ -108,6 +108,25 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.11</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <!-- The gmavenplus plugin is used to compile Groovy code. To learn
                             more about this plugin, visit https://github.com/groovy/GMavenPlus/wiki -->
                         <groupId>org.codehaus.gmavenplus</groupId>
