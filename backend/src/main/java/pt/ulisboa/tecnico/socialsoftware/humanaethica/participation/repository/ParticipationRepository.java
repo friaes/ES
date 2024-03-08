@@ -18,7 +18,7 @@ public interface ParticipationRepository extends JpaRepository<Participation, In
     List<Participation> findParticipationsByVolunteer(Integer volunteerId);
 
     @Query("SELECT e FROM Participation e WHERE e.activity.id = :activityId")
-    List<Participation> findParticpationsByActivity(Integer activityId);
+    List<Participation> findParticipationsByActivity(Integer activityId);
     
     @Modifying
     @Query(value = "DELETE FROM Participation", nativeQuery = true)

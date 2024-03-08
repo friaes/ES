@@ -14,6 +14,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.repository.UserRepository;
 
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
+import java.util.List;
 
 @Service
 public class ParticipationService {
@@ -44,7 +45,17 @@ public class ParticipationService {
     }
 
 
-    //TODO 2nd feature
+    //um membro de uma instituição pode ver uma lista de todas as participações numa atividade da sua instituição
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<ParticipationDto> getParticipationsByActivity(Integer activityID) {
+        
+        if (activityID == null) throw new HEException(ACTIVITY_NOT_FOUND);
+        Activity activity = (Activity) activityRepository.findById(activityID).orElseThrow(() -> new HEException(ACTIVITY_NOT_FOUND, activityID));
+        
+        List <Participation> participations = participationRepository.findParticipationsByActivity(activity.getId());
+        //cria a lista de ParticipationDto a partir da lista de Participation
+        return participations.stream().map(ParticipationDto::new).toList();
+    }
 
 
 }
