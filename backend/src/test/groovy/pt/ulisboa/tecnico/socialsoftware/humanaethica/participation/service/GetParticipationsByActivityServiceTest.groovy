@@ -22,19 +22,25 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
 import spock.lang.Unroll
 
 @DataJpaTest
-class GetParticipationsByActivityTest extends SpockTest {
+class GetParticipationsByActivityServiceTest extends SpockTest {
 
     def activity
     def activityDto
     def institution
-    def volunteer
+    def volunteer1
+    def volunteer2
 
     def setup() {
         given: "activity info"
-        def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
+        def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,2,ACTIVITY_DESCRIPTION_1,
                                             NOW,IN_TWO_DAYS,IN_THREE_DAYS,null)
-        and: "a volunteer"
-        volunteer = authUserService.loginDemoVolunteerAuth().getUser()
+        and: "two volunteers"
+        volunteer1 = authUserService.loginDemoVolunteerAuth().getUser()
+        
+        volunteer2 = new Volunteer(USER_2_NAME, USER_2_USERNAME, USER_2_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
+        userRepository.save(volunteer2)
+        ((AuthNormalUser) volunteer2.authUser).setActive(true)
+        
         and: "a instituition"
         def institution = institutionService.getDemoInstitution()
         and: "a theme"
@@ -54,25 +60,33 @@ class GetParticipationsByActivityTest extends SpockTest {
         result==[]
     }
 
-    def "get participations by activity, with just one participation"() {
-        given: "an participation"
-        def participationDto = createParticipationDto(volunteer.getId(), IN_ONE_DAY, 1)
-        participationService.createParticipation(activity.getId(),participationDto)
+    def "get participations by activity, with two participations"() {
+        given: "two participations"
+        def participationDto1 = createParticipationDto(volunteer1.getId(), IN_ONE_DAY, 1)
+        participationService.createParticipation(activity.getId(),participationDto1)
+        def participationDto2 = createParticipationDto(volunteer2.getId(), IN_ONE_DAY, 5)
+        participationService.createParticipation(activity.getId(),participationDto2)
+
 
         when:
         def result = participationService.getParticipationsByActivity(activity.getId())
 
         then:"the returned data is correct" 
-        result.size()==1
-        result[0].getRating()== 1
-        result[0].getVolunteerId()==volunteer.getId()
+        result.size()==2
+        result[0].getRating()==1
+        result[0].getVolunteerId()==volunteer1.getId()
         result[0].getActivityId()==activity.getId()
+
+        result[1].getRating()==5
+        result[1].getVolunteerId()==volunteer2.getId()
+        result[1].getActivityId()==activity.getId()
+
     }
 
     @Unroll
     def "get participations by activity if the activity doesn't exist"() {
-        given: "an participation"
-        def participationDto = createParticipationDto(volunteer.getId(), IN_ONE_DAY, 1)
+        given: "a participation"
+        def participationDto = createParticipationDto(volunteer1.getId(), IN_ONE_DAY, 1)
         participationService.createParticipation(activity.getId(),participationDto)
 
         when:
@@ -85,8 +99,8 @@ class GetParticipationsByActivityTest extends SpockTest {
 
     @Unroll
     def "get participation by activity if Id passed id null"(){
-        given: "an participation"
-        def participationDto = createParticipationDto(volunteer.getId(), IN_ONE_DAY, 1)
+        given: "a participation"
+        def participationDto = createParticipationDto(volunteer1.getId(), IN_ONE_DAY, 1)
         participationService.createParticipation(activity.getId(),participationDto)
         
         when:
