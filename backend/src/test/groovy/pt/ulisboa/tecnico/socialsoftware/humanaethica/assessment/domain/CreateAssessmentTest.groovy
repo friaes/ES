@@ -13,6 +13,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 
+import static pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler.toISOString
+
 @DataJpaTest
 class CreateAssessmentTest extends SpockTest {
 
@@ -42,7 +44,6 @@ class CreateAssessmentTest extends SpockTest {
 
         then: "assessment is created"
         assessment.review == assessmentDto.review
-        // assessment.reviewDate == assessmentDto.reviewDate
         assessment.volunteer == volunteer
         assessment.institution == institution
     }
@@ -86,10 +87,10 @@ class CreateAssessmentTest extends SpockTest {
 
     def "Dates"() {
         when:
-        def now = DateHandler.now()
+        def now = toISOString(DateHandler.now())
         assessmentDto.setReviewDate(now)
         then:
-        now.isEqual(assessmentDto.getReviewDate())
+        now.equals(assessmentDto.getReviewDate())
     }
 
     def "Assessment already created"() {

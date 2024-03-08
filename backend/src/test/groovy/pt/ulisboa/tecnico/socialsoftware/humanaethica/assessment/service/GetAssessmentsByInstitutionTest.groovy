@@ -46,7 +46,7 @@ class GetAssessmentsByInstitutionTest extends SpockTest {
 
         assessmentDto = new AssessmentDto()
         assessmentDto.setReview("1234567890")
-        assessmentDto.setReviewDate(DateHandler.now())
+        assessmentDto.setReviewDate(DateHandler.toISOString(DateHandler.now()))
 
         assessment = new Assessment(institution, volunteer, assessmentDto)
     }
