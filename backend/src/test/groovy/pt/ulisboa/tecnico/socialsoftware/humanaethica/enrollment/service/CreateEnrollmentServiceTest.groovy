@@ -55,6 +55,7 @@ class CreateEnrollmentTest extends SpockTest {
         def result = enrollmentService.createEnrollment(volunteer.getId(), activity.getId(),enrollmentDto)
 
         then: "enrollment is created"
+        enrollmentRepository.count() == 1
         result != null
         result.getMotivation() == "motivation to max"
         result.getVolunteer().getId() == volunteer.getId()
@@ -73,7 +74,8 @@ class CreateEnrollmentTest extends SpockTest {
         when: "create enrollment"
         enrollmentService.createEnrollment(null, activity.getId(),enrollmentDto)
 
-        then: "enrollment is created"
+        then: "error is thrown"
+        enrollmentRepository.count() == 0
         def error = thrown(HEException)
         error.getErrorMessage() == ErrorMessage.USER_NOT_FOUND
     }
@@ -91,6 +93,7 @@ class CreateEnrollmentTest extends SpockTest {
         enrollmentService.createEnrollment(volunteer.getId(), null, enrollmentDto)
 
         then: "error is thrown"
+        enrollmentRepository.count() == 0
         def error = thrown(HEException)
         error.getErrorMessage() == ErrorMessage.ACTIVITY_NOT_FOUND
     }
@@ -104,10 +107,11 @@ class CreateEnrollmentTest extends SpockTest {
         userDto.setUsername(USER_1_USERNAME)
         userDto.setEmail(USER_1_EMAIL)
         def enrollmentDto = createEnrollmentDto(activityDto, userDto, IN_ONE_DAY, "motivation to max")
-        when: "create enrollment"
+        when: "error is thrown"
         enrollmentService.createEnrollment(volunteer.getId(), 222,enrollmentDto)
 
         then: "enrollment is created"
+        enrollmentRepository.count() == 0
         def error = thrown(HEException)
         error.getErrorMessage() == ErrorMessage.ACTIVITY_NOT_FOUND
 
@@ -126,6 +130,7 @@ class CreateEnrollmentTest extends SpockTest {
         enrollmentService.createEnrollment(222, activity.getId(),enrollmentDto)
 
         then: "enrollment is created"
+        enrollmentRepository.count() == 0
         def error = thrown(HEException)
         error.getErrorMessage() == ErrorMessage.USER_NOT_FOUND
     }

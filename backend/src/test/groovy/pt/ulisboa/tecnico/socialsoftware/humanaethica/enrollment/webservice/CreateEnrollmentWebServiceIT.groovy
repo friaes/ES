@@ -78,7 +78,12 @@ class CreateEnrollmentWebServiceIT extends SpockTest {
                 .retrieve()
                 .bodyToMono(EnrollmentDto.class)
                 .block()
-        then: "enrollment created"
+        then: "enrollment created, in repository and response"
+        enrollmentRepository.count() == 1
+        def enrollment = enrollmentRepository.findAll().get(0)
+        enrollment != null
+        enrollment.motivation == "motivation to max"
+        enrollment.activity.name == ACTIVITY_NAME_1
         response.motivation == "motivation to max"
         response.activity.name == ACTIVITY_NAME_1
         
@@ -107,6 +112,7 @@ class CreateEnrollmentWebServiceIT extends SpockTest {
         then: "an error is thrown"
         def error = thrown(WebClientResponseException)
         error.statusCode == HttpStatus.FORBIDDEN
+        enrollmentRepository.count() == 0
 
         cleanup:
         deleteAll()
