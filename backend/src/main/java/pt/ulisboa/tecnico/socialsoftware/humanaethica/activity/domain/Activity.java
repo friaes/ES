@@ -322,15 +322,12 @@ public class Activity {
         }
     }
     //Add the methods to manage the enrolments
-    private void addEnrolment(Enrollment enrollment) {
+    public void addEnrollment(Enrollment enrollment) {
         this.enrollments.add(enrollment);
     }
-    //Remove the enrolment from the list
-    private void removeEnrolment(Enrollment enrollment) {
-        this.enrollments.remove(enrollment);
-    }
+    
     //Get the list of enrolments
-    private List<Enrollment> getEnrollments() {
+    public List<Enrollment> getEnrollments() {
         return this.enrollments;
     }
 }

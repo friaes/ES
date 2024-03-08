@@ -55,6 +55,8 @@ class CreateEnrollmentTest extends SpockTest {
         def result = enrollmentService.createEnrollment(volunteer.getId(), activity.getId(),enrollmentDto)
 
         then: "enrollment is created"
+        activity.getEnrollments().size() == 1
+        volunteer.getEnrollments().size() == 1
         enrollmentRepository.count() == 1
         result != null
         result.getMotivation() == "motivation to max"

@@ -41,6 +41,8 @@ public class Enrollment {
         setMotivation(enrollmentDto.getMotivation());
         setEnrollmentDate(DateHandler.toLocalDateTime(enrollmentDto.getEnrollmentDate()));
         verifyInvariants();
+        activity.addEnrollment(this);
+        volunteer.addEnrollment(this);
     }
 
     public Integer getId() {

@@ -31,9 +31,6 @@ public class UserDto {
     private String creationDate;
 
     private String lastAccess;
-
-    //add the enrollment list
-    private List<EnrollmentDto> enrollments;
     
     private boolean hasDocument;
     public UserDto() {
@@ -161,18 +158,5 @@ public class UserDto {
 
     public void setHasDocument(boolean hasDocument) {
         this.hasDocument = hasDocument;
-    }
-
-    //add getter and setter for the enrollments
-    public List<EnrollmentDto> getEnrollments() {
-        return enrollments;
-    }
-
-    public void setEnrollments(List<EnrollmentDto> enrollments) {
-        this.enrollments = enrollments;
-    }
-
-    public void addEnrollment(EnrollmentDto enrollment) {
-        this.enrollments.add(enrollment);
     }
 }
