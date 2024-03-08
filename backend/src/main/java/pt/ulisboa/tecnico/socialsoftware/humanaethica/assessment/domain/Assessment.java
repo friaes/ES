@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
+import static pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler.toLocalDateTime;
 
 @Entity
 @Table(name = "assessment")
@@ -32,7 +33,7 @@ public class Assessment {
 
     public Assessment(@NotNull Institution institution, @NotNull Volunteer volunteer, AssessmentDto assessmentDto) {
         setReview(assessmentDto.getReview());
-        setReviewDate(assessmentDto.getReviewDate());
+        setReviewDate(toLocalDateTime(assessmentDto.getReviewDate()));
         setVolunteer(volunteer);
         setInstitution(institution);
         setId(assessmentDto.getId());
