@@ -121,6 +121,19 @@ class CreateParticipationMethodTest extends SpockTest {
         
      }
 
+     def "create participation with null id for volunteer"(){
+        given: "participationDto"
+        participationDto.setId(200)
+        participationDto.setRating(50)
+        participationDto.setAcceptanceDate(null)
+        
+        when: "toString"
+        def string = participationDto.toString()
+        
+        then: "string is correct"
+        string == "{ id='200', rating='50', acceptanceDate='null', volunteerId='null', activityId='null'}"
+     }
+
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}
 }

@@ -10,11 +10,10 @@ import java.util.List;
 @Entity
 @DiscriminatorValue(User.UserTypes.VOLUNTEER)
 public class Volunteer extends User {
-        //CHECK IN CLASS
-        @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer", orphanRemoval = true, fetch = FetchType.EAGER)
-        private List<Participation> participations = new ArrayList<>();
-        public Volunteer() {
-        }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "volunteer", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Participation> participations = new ArrayList<>();
+    public Volunteer() {
+    }
 
     public Volunteer(String name, String username, String email, AuthUser.Type type, State state) {
         super(name, username, email, Role.VOLUNTEER, type, state);
