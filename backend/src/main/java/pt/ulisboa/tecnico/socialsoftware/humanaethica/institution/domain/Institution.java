@@ -27,7 +27,7 @@ public class Institution {
 
     private boolean active = false;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     List<Assessment> assessments;
 
     @Column(name = "creation_date")
