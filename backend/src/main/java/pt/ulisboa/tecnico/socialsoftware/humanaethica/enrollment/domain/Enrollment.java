@@ -79,19 +79,21 @@ public class Enrollment {
         this.activity = activity;
     }
 
+    //verifies if the invariants are being respected
     public void verifyInvariants() {
         minimumMotivation();
         onlyOneEnrollmentPerActivity();
         enrollmentDateBeforeAcDate();
     }
 
+    //motivation must have at least 10 characters
     private void minimumMotivation() {
         if (motivation.length() < 10) {
             throw new HEException(MINIMUM_MOTIVATION_LENGTH);
         }
     }
 
-    //um voluntário só pode estar inscrito uma vez numa atividade
+    //only one enrollment per activity for volunteer
     private void onlyOneEnrollmentPerActivity() {
         if (this.volunteer.getEnrollments()==null) {
             return;
@@ -103,6 +105,7 @@ public class Enrollment {
         }
     }
 
+    //enrollment date must be before the Dead line date
     private void enrollmentDateBeforeAcDate() {
         if (this.enrollmentDate.isAfter(this.activity.getApplicationDeadline())) {
             throw new HEException(ENROLLMENT_DATE_AFTER_ACTIVITY_DATE);
