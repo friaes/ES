@@ -38,7 +38,6 @@ public class Activity {
     @JoinTable(name = "activity_themes")
     private List<Theme> themes = new ArrayList<>();
 
-    //CHECK IN CLASS
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "activity", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Participation> participations = new ArrayList<>();
 
