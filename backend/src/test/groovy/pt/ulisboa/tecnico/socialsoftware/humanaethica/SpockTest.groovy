@@ -9,6 +9,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.AuthUserService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.dto.AuthDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.dto.AuthPasswordDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.repository.AuthUserRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoUtils
@@ -24,6 +25,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.repository.Ins
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.ActivityRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.ActivityService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.repository.ThemeRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.ParticipationService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.repository.ParticipationRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.Mailer
@@ -33,6 +36,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentD
 import spock.lang.Specification
 
 import java.time.LocalDateTime
+import java.util.ArrayList;
+import java.util.List;
 
 class SpockTest extends Specification {
     // remote requests
@@ -230,9 +235,25 @@ class SpockTest extends Specification {
         activityDto
     }
 
+    @Autowired
+    ParticipationRepository participationRepository
+
+    @Autowired
+    ParticipationService participationService
+
+
+    protected ParticipationDto createParticipationDto(volunteerId, acceptance, rating) {
+        def participationDto = new ParticipationDto()
+        participationDto.setVolunteerId(volunteerId)
+        participationDto.setRating(rating)
+        participationDto.setAcceptanceDate(DateHandler.toISOString(acceptance))
+        participationDto
+    }
+
     // clean database
 
     def deleteAll() {
+        participationRepository.deleteAll()
         activityRepository.deleteAllActivityTheme()
         activityRepository.deleteAll()
         enrollmentRepository.deleteAll()

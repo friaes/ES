@@ -44,7 +44,14 @@ public enum ErrorMessage {
     // Enrollment
     MINIMUM_MOTIVATION_LENGTH("The motivation must have at least 10 characters"),
     VOLUNTERR_ALREADY_ENROLLED_IN_ACTIVITY("Volunteer is already enrolled in activity with id %d"),
-    ENROLLMENT_DATE_AFTER_ACTIVITY_DATE("Enrollment date is after enrollments end date");
+    ENROLLMENT_DATE_AFTER_ACTIVITY_DATE("Enrollment date is after enrollments end date"),
+
+    // Participation
+    PARTICIPATION_EXCEEDS_ACTIVITY_LIMIT("Number of participations exceeded"),
+    PARTICIPATION_DUPLICATE("Volunteer is already participating in this activity"),
+    PARTICIPATION_BEFORE_APPLICATION_END("Application period is still ongoing");
+
+
 
     public final String label;
 

@@ -5,6 +5,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.domain.Enrollment;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain.Participation;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 
@@ -36,6 +37,10 @@ public class Activity {
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "activity_themes")
     private List<Theme> themes = new ArrayList<>();
+
+    //CHECK IN CLASS
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "activity", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Participation> participations = new ArrayList<>();
 
     @ManyToOne 
     private Institution institution;
@@ -237,6 +242,15 @@ public class Activity {
     public Institution getInstitution() {
         return institution;
     }
+
+    public List<Participation> getParticipations() {
+        return this.participations;
+    }
+
+    public void addParticipation(Participation participation) {
+        this.participations.add(participation);
+    }
+
 
     private void verifyInvariants() {
         nameIsRequired();
