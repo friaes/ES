@@ -40,7 +40,7 @@
             </template>
             <span>Report Activity</span>
           </v-tooltip>
-          <v-tooltip>
+          <v-tooltip v-if="isAplicationDeadlineValid(item)" bottom>
             <template v-slot:activator="{ on }">
               <v-icon
                 class="mr-2 action-button"
@@ -143,6 +143,12 @@ export default class VolunteerActivitiesView extends Vue {
       await this.$store.dispatch('error', error);
     }
     await this.$store.dispatch('clearLoading');
+  }
+
+  isAplicationDeadlineValid(activity: Activity) {
+    const today = new Date();
+    const deadline = new Date(activity.applicationDeadline);
+    return deadline >= today;
   }
 
   async reportActivity(activity: Activity) {
