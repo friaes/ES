@@ -151,6 +151,20 @@ export default class VolunteerActivitiesView extends Vue {
     return deadline >= today;
   }
 
+  async volunteerEnrolled(activity: Activity) {
+    try {
+      const result = await RemoteServices.getVolunteerEnrollments();
+      for (const enrollment of result) {
+        if (enrollment.activity.id === activity.id) {
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      await this.$store.dispatch('error', error);
+    }
+  }
+
   async reportActivity(activity: Activity) {
     if (activity.id !== null) {
       try {
