@@ -28,13 +28,8 @@
           >
         </v-card-title>
       </template>
-      <template v-slot:[`item.themes`]="{ item }">
-        <v-chip v-for="theme in item.themes" v-bind:key="theme.id">
-          {{ theme.completeName }}
-        </v-chip>
-      </template>
-      <template v-slot:[`item.action`]>
-        <v-tooltip bottom>
+      <template v-slot:[`item.action`]="{ item }">
+        <v-tooltip v-if="!item.participating" bottom>
           <template v-slot:activator="{ on }">
             <v-icon
               class="mr-2 action-button"
