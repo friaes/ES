@@ -40,7 +40,10 @@
             </template>
             <span>Report Activity</span>
           </v-tooltip>
-          <v-tooltip v-if="isAplicationDeadlineValid(item) && volunteerEnrolled(item)" bottom>
+          <v-tooltip
+            v-if="!isEnrolled(item) && isAplicationDeadlineValid(item)"
+            bottom
+          >
             <template v-slot:activator="{ on }">
               <v-icon
                 class="mr-2 action-button"
@@ -71,6 +74,7 @@ import { show } from 'cli-cursor';
 export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
   search: string = '';
+  enrollments: any[] = [];
   headers: object = [
     {
       text: 'Name',
@@ -139,6 +143,7 @@ export default class VolunteerActivitiesView extends Vue {
     await this.$store.dispatch('loading');
     try {
       this.activities = await RemoteServices.getActivities();
+      this.enrollments = await RemoteServices.getVolunteerEnrollments();
     } catch (error) {
       await this.$store.dispatch('error', error);
     }
@@ -151,18 +156,9 @@ export default class VolunteerActivitiesView extends Vue {
     return deadline >= today;
   }
 
-  async volunteerEnrolled(activity: Activity) {
-    try {
-      const result = await RemoteServices.getVolunteerEnrollments();
-      for (const enrollment of result) {
-        if (enrollment.activity.id === activity.id) {
-          return false;
-        }
-      }
-      return true;
-    } catch (error) {
-      await this.$store.dispatch('error', error);
-    }
+  isEnrolled(activity: Activity) {
+    console.log(this.enrollments);
+    return this.enrollments.some((e) => e.activityId === activity.id);
   }
 
   async reportActivity(activity: Activity) {
