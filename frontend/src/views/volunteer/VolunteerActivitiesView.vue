@@ -40,7 +40,7 @@
             </template>
             <span>Report Activity</span>
           </v-tooltip>
-          <v-tooltip v-if="isAplicationDeadlineValid(item)" bottom>
+          <v-tooltip v-if="isAplicationDeadlineValid(item) && volunteerEnrolled(item)" bottom>
             <template v-slot:activator="{ on }">
               <v-icon
                 class="mr-2 action-button"
