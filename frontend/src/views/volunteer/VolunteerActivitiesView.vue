@@ -50,7 +50,7 @@
                 color="green"
                 v-on="on"
                 data-cy="applyButton"
-                @click="applyActivity(item)"
+                @click="createEnrollment(item)"
                 >mdi-check-bold</v-icon
               >
             </template>
@@ -58,6 +58,14 @@
           </v-tooltip>
         </template>
       </v-data-table>
+      <enrollment-dialog
+        v-if="dialog && selectedEnrollment"
+        v-model="dialog"
+        :enrollment="selectedEnrollment"
+        :activity="selectedActivity"
+        v-on:save-enrollment="onSaveEnrollment"
+        v-on:close-enrollment-dialog="onCloseEnrollmentDialog"
+      />
     </v-card>
   </div>
 </template>
@@ -67,11 +75,20 @@ import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import { show } from 'cli-cursor';
+import EnrollmentDialog from '@/views/volunteer/EnrollmentDialog.vue';
+import Enrollment from '@/models/enrollment/Enrollment';
 
 @Component({
+  components: {
+    'enrollment-dialog': EnrollmentDialog,
+  },
   methods: { show },
 })
 export default class VolunteerActivitiesView extends Vue {
+  dialog: boolean = false;
+  selectedEnrollment: Enrollment | null = null;
+  selectedActivity: Activity | null = null;
+
   activities: Activity[] = [];
   search: string = '';
   enrollments: any[] = [];
@@ -159,6 +176,25 @@ export default class VolunteerActivitiesView extends Vue {
   isEnrolled(activity: Activity) {
     console.log(this.enrollments);
     return this.enrollments.some((e) => e.activityId === activity.id);
+  }
+
+  createEnrollment(item: Activity) {
+    this.dialog = true;
+    this.selectedEnrollment = new Enrollment();
+    this.selectedActivity = new Activity(item);
+  }
+
+  async onSaveEnrollment(enrollment: Enrollment) {
+    this.dialog = false;
+    this.enrollments.push(enrollment);
+    this.selectedActivity = null;
+    this.selectedEnrollment = null;
+  }
+
+  onCloseEnrollmentDialog() {
+    this.dialog = false;
+    this.selectedActivity = null;
+    this.selectedEnrollment = null;
   }
 
   async reportActivity(activity: Activity) {
