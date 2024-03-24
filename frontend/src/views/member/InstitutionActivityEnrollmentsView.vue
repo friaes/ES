@@ -28,8 +28,11 @@
           >
         </v-card-title>
       </template>
+      <template v-slot:[`item.participating`]="{ item }">
+        <p>{{ isParticipating(item) }}</p>
+      </template>
       <template v-slot:[`item.action`]="{ item }">
-        <v-tooltip v-if="!item.participating && activity.numberOfParticipations < activity.participantsNumberLimit" bottom>
+        <v-tooltip v-if="!isParticipating(item) && activity.numberOfParticipations < activity.participantsNumberLimit" bottom>
           <template v-slot:activator="{ on }">
             <v-icon
               class="mr-2 action-button"
@@ -69,6 +72,7 @@ import ParticipationSelectionDialog from '@/views/member/ParticipationSelectionD
 export default class InstitutionActivityEnrollmentsView extends Vue {
   activity!: Activity;
   enrollments: Enrollment[] = [];
+  participations: Participation[] = [];
   search: string = '';
 
   currentParticipation: Participation | null = null;
@@ -116,7 +120,9 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
         this.enrollments = await RemoteServices.getActivityEnrollments(
           this.activity.id
         );
-
+        this.participations = await RemoteServices.getParticipationsByActivityId(
+          this.activity.id
+        );
       } catch (error) {
         await this.$store.dispatch('error', error);
       }
@@ -144,6 +150,12 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
     await this.$store.dispatch('setActivity', null);
     this.$router.push({ name: 'institution-activities' }).catch(() => {});
   }
+
+  isParticipating(enrollment: Enrollment) {
+    console.log(this.participations);
+    return this.participations.some((p) => p.volunteerId === enrollment.volunteerId);
+  }
+
 }
 </script>
 
