@@ -63,10 +63,22 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
 
   headers: object = [
     {
+      text: 'Name',
+      value: 'volunteerName',
+      align: 'left',
+      width: '30%',
+    },
+    {
       text: 'Motivation',
       value: 'motivation',
       align: 'left',
-      width: '50%',
+      width: '40%',
+    },
+    {
+      text: 'Participating',
+      value: 'participating',
+      align: 'left',
+      width: '20%',
     },
     {
       text: 'Application Date',
@@ -91,6 +103,7 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
         this.enrollments = await RemoteServices.getActivityEnrollments(
           this.activity.id,
         );
+
       } catch (error) {
         await this.$store.dispatch('error', error);
       }

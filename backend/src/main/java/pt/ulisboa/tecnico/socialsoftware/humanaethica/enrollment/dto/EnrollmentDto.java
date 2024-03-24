@@ -6,8 +6,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 public class EnrollmentDto {
     private Integer id;
     private String motivation;
-
+    private String volunteerName;
     private String enrollmentDateTime;
+    private Boolean participating;
 
 
     public EnrollmentDto() {}
@@ -15,7 +16,11 @@ public class EnrollmentDto {
     public EnrollmentDto(Enrollment enrollment) {
         this.id = enrollment.getId();
         this.motivation = enrollment.getMotivation();
+        this.volunteerName = enrollment.getVolunteer().getName();
         this.enrollmentDateTime = DateHandler.toISOString(enrollment.getEnrollmentDateTime());
+        this.participating = enrollment.getVolunteer().getParticipations().stream().anyMatch(
+                             participation -> participation.getActivity() == enrollment.getActivity());
+
     }
 
     public Integer getId() {
@@ -34,11 +39,27 @@ public class EnrollmentDto {
         this.motivation = motivation;
     }
 
+    public String getVolunteerName() {
+        return volunteerName;
+    }
+
+    public void setVolunteerName(String volunteerName) {
+        this.volunteerName = volunteerName;
+    }
+
     public String getEnrollmentDateTime() {
         return enrollmentDateTime;
     }
 
     public void setEnrollmentDateTime(String enrollmentDateTime) {
         this.enrollmentDateTime = enrollmentDateTime;
+    }
+
+    public Boolean getParticipating() {
+        return participating;
+    }
+
+    public void setParticipating(Boolean participating) {
+        this.participating = participating;
     }
 }
