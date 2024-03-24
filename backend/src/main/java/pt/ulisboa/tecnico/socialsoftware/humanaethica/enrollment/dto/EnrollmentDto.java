@@ -8,9 +8,8 @@ public class EnrollmentDto {
     private String motivation;
     private String volunteerName;
     private String enrollmentDateTime;
-    private Boolean participating;
-
     private Integer activityId;
+    private Integer volunteerId;
 
     public EnrollmentDto() {}
 
@@ -20,9 +19,7 @@ public class EnrollmentDto {
         this.volunteerName = enrollment.getVolunteer().getName();
         this.enrollmentDateTime = DateHandler.toISOString(enrollment.getEnrollmentDateTime());
         this.activityId = enrollment.getActivity().getId();
-        this.participating = enrollment.getVolunteer().getParticipations().stream().anyMatch(
-                             participation -> participation.getActivity() == enrollment.getActivity());
-
+        this.volunteerId = enrollment.getVolunteer().getId();
     }
 
     public Integer getId() {
@@ -65,11 +62,11 @@ public class EnrollmentDto {
         this.activityId = activityId;
     }
 
-    public Boolean getParticipating() {
-        return participating;
+    public Integer getVolunteerId() {
+        return volunteerId;
     }
 
-    public void setParticipating(Boolean participating) {
-        this.participating = participating;
+    public void setVolunteerId(Integer volunteerId) {
+        this.volunteerId = volunteerId;
     }
 }
