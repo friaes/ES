@@ -33,6 +33,7 @@
           <template v-slot:activator="{ on }">
             <v-icon
               class="mr-2 action-button"
+              @click="newParticipation(item)"
               v-on="on"
               >check
             </v-icon>
@@ -41,6 +42,13 @@
         </v-tooltip>
       </template>
     </v-data-table>
+    <participation-dialog
+      v-if="currentParticipation && ParticipationSelectionDialog"
+      v-model="ParticipationSelectionDialog"
+      :participation="currentParticipation"
+      v-on:make-participant="onMakeParticipant"
+      v-on:close-participation-dialog="onCloseParticipationSelectionDialog"
+    />
   </v-card>
 </template>
 
@@ -49,12 +57,22 @@ import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import Enrollment from '@/models/enrollment/Enrollment';
+import Participation from '@/models/participation/Participation';
+import ParticipationSelectionDialog from '@/views/member/ParticipationSelectionDialog.vue';
 
-@Component({})
+
+@Component({
+  components: {
+    'participation-dialog': ParticipationSelectionDialog,
+  },
+})
 export default class InstitutionActivityEnrollmentsView extends Vue {
   activity!: Activity;
   enrollments: Enrollment[] = [];
   search: string = '';
+
+  currentParticipation: Participation | null = null;
+  ParticipationSelectionDialog: boolean = false;
 
   headers: object = [
     {
@@ -96,7 +114,7 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
       await this.$store.dispatch('loading');
       try {
         this.enrollments = await RemoteServices.getActivityEnrollments(
-          this.activity.id,
+          this.activity.id
         );
 
       } catch (error) {
@@ -104,6 +122,22 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
       }
       await this.$store.dispatch('clearLoading');
     }
+  }
+
+  newParticipation() {
+    this.currentParticipation = new Participation();
+    this.ParticipationSelectionDialog = true;
+  }
+
+  onCloseParticipationSelectionDialog() {
+    this.currentParticipation = null;
+    this.ParticipationSelectionDialog = false;
+  }
+
+  async onMakeParticipant(participation: Participation) {
+    //TODO
+    this.currentParticipation = null;
+    this.ParticipationSelectionDialog = false;
   }
 
   async getActivities() {
