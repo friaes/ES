@@ -486,6 +486,17 @@ export default class RemoteServices {
 
   // Participation controller
 
+  static async createParticipation(activityId: number, participation: Participation) {
+    return httpClient
+      .post(`/activities/${activityId}/participations`, participation)
+      .then((response) => {
+        return new Participation(response.data);
+      })
+      .catch(async (error) => {
+        throw Error(await this.errorMessage(error));
+      });
+  }
+
   static async getParticipationsByActivityId(activityId: number) {
     return httpClient
       .get(`/activities/${activityId}/participations`)
@@ -498,7 +509,6 @@ export default class RemoteServices {
         throw Error(await this.errorMessage(error));
       });
   }
-
 
   // Assessment Controller
 
