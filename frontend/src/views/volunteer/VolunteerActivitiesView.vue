@@ -174,7 +174,6 @@ export default class VolunteerActivitiesView extends Vue {
   }
 
   isEnrolled(activity: Activity) {
-    console.log(this.enrollments);
     return this.enrollments.some((e) => e.activityId === activity.id);
   }
 

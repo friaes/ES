@@ -76,8 +76,6 @@ export default class EnrollmentDialog extends Vue {
   async created() {
     this.selectedEnrollment = new Enrollment(this.enrollment);
     this.selectedActivity = new Activity(this.activity);
-    console.log(this.selectedActivity);
-    console.log(this.selectedEnrollment);
   }
 
   async createEnrollment() {
