@@ -32,7 +32,7 @@
         color="blue-darken-1"
         variant="text"
         @click="makeParticipant"
-        data-cy="saveParticipation"
+        data-cy="selectParticipation"
         >
         Make Participant
         </v-btn>
@@ -44,6 +44,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Model } from 'vue-property-decorator';
 import Participation  from '@/models/participation/Participation';
+import Enrollment  from '@/models/enrollment/Enrollment';
 import RemoteServices from '@/services/RemoteServices';
 
 @Component({
@@ -51,21 +52,21 @@ import RemoteServices from '@/services/RemoteServices';
   })
   export default class ParticipationSelectionDialog extends Vue {
     @Model('dialog', Boolean) dialog!: boolean;
-    @Prop({ type: Participation, required: true }) readonly participation!: Participation;
+    @Prop({ type: Enrollment, required: true }) readonly enrollment!: Enrollment;
 
     newParticipation: Participation = new Participation();
     activityId: number | null = null;
 
-    cypressCondition: boolean = false;
-
     async created() {
     this.newParticipation = new Participation();
+    this.activityId = this.enrollment.activityId as number;
+    this.newParticipation.volunteerId =this.enrollment.volunteerId as number;
   }
   
     async makeParticipant() {
       if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
         try {
-          const result = await RemoteServices.createParticipation(
+          const result = await RemoteServices.createParticipationAsMember(
             this.activityId as number,
             this.newParticipation,
           );
