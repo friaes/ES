@@ -9,9 +9,9 @@ const credentials = {
 const INSTITUTION_COLUMNS = "institutions (id, active, confirmation_token, creation_date, email, name, nif, token_generation_date)";
 const USER_COLUMNS = "users (user_type, id, creation_date, name, role, state, institution_id)";
 const AUTH_USERS_COLUMNS = "auth_users (auth_type, id, active, email, username, user_id)";
-const ACTIVITY_COLUMNS  = "activities (id, application_deadline, creation_date, description, ending_date, name, participants_number_limit, region, starting_date, state, institution_id)";
-const ENROLLMENT_COLUMNS = "enrollments (id, enrollment_date_time, motivation, activity_id, volunteer_id)"
-const PARTICIPATION_COLUMNS = "participations (id, acceptance_date, rating, activity_id, volunteer_id)"
+const ACTIVITY_COLUMNS  = "activity (id, application_deadline, creation_date, description, ending_date, name, participants_number_limit, region, starting_date, state, institution_id)";
+const ENROLLMENT_COLUMNS = "enrollment (id, enrollment_date_time, motivation, activity_id, volunteer_id)"
+const PARTICIPATION_COLUMNS = "participation (id, acceptance_date, rating, activity_id, volunteer_id)"
 
 const now = new Date();
 const tomorrow = new Date(now);
@@ -24,6 +24,14 @@ const dayBeforeYesterday = new Date(now);
 dayBeforeYesterday.setDate(now.getDate() - 2);
 
 Cypress.Commands.add('deleteAllButArs', () => {
+  cy.task('queryDatabase', {
+    query: "DELETE FROM PARTICIPATION",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ENROLLMENT",
+    credentials: credentials,
+  });
   cy.task('queryDatabase', {
     query: "DELETE FROM ACTIVITY",
     credentials: credentials,
@@ -171,7 +179,7 @@ function generateEnrollmentTuple(id, enrollment_date_time, motivation, activity_
     + enrollment_date_time + "', '"
     + motivation + "', '"
     + activity_id + "', '"
-    + volunteer_id + ")";
+    + volunteer_id + "')";
 }
 
 function generateActivityTuple(id, description, name, participants_number_limit) {
@@ -179,12 +187,12 @@ function generateActivityTuple(id, description, name, participants_number_limit)
     + id + "', '2024-02-06 17:58:21.402146', '2024-01-06 17:58:21.402146', '"
     + description + "', '2024-02-08 17:58:21.402146', '"
     + name + "', '"
-    + participants_number_limit + "', 'Lisbon', '2024-02-07 17:58:21.40214', 'APPROVED', 1)";
+    + participants_number_limit + "', 'Lisbon', '2024-02-07 17:58:21.40214', 'APPROVED', '1')";
 }
 
 function generateParticipationTuple(id, activity_id, volunteer_id) {
   return "VALUES ('"
     + id + "', '2024-02-06 18:51:37.595713', '5', '"
     + activity_id + "', '"
-    + volunteer_id + ")";
+    + volunteer_id + "')";
 }
