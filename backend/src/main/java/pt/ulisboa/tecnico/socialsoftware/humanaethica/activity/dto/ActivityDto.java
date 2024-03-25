@@ -20,7 +20,7 @@ public class ActivityDto {
     private String creationDate;
     private List<ThemeDto> themes;
     private InstitutionDto institution;
-    private Integer numberOfParticipations;
+    private Integer numberOfParticipations = 0;
 
     public ActivityDto(){
     }
