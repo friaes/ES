@@ -106,6 +106,12 @@ export default class InstitutionActivitiesView extends Vue {
       width: '5%',
     },
     {
+      text: 'Participations',
+      value: 'numberOfParticipations',
+      align: 'left',
+      width: '5%'
+    },
+    {
       text: 'Themes',
       value: 'themes',
       align: 'left',
@@ -115,7 +121,7 @@ export default class InstitutionActivitiesView extends Vue {
       text: 'Description',
       value: 'description',
       align: 'left',
-      width: '30%',
+      width: '25%',
     },
     {
       text: 'State',
