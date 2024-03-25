@@ -36,7 +36,7 @@
           <template v-slot:activator="{ on }">
             <v-icon
               class="mr-2 action-button"
-              @click="newParticipation(item)"
+              @click="selectParticipant(item)"
               v-on="on"
               >check
             </v-icon>
@@ -46,9 +46,9 @@
       </template>
     </v-data-table>
     <participation-dialog
-      v-if="currentParticipation && ParticipationSelectionDialog"
+      v-if="currentEnrollment && ParticipationSelectionDialog"
       v-model="ParticipationSelectionDialog"
-      :participation="currentParticipation"
+      :enrollment="currentEnrollment"
       v-on:make-participant="onMakeParticipant"
       v-on:close-participation-dialog="onCloseParticipationSelectionDialog"
     />
@@ -75,7 +75,7 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
   participations: Participation[] = [];
   search: string = '';
 
-  currentParticipation: Participation | null = null;
+  currentEnrollment: Enrollment  | null = null;
   ParticipationSelectionDialog: boolean = false;
 
   headers: object = [
@@ -130,20 +130,22 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
     }
   }
 
-  newParticipation() {
-    this.currentParticipation = new Participation();
+  selectParticipant(enrollment: Enrollment) {
+    this.currentEnrollment = enrollment;
     this.ParticipationSelectionDialog = true;
   }
 
   onCloseParticipationSelectionDialog() {
-    this.currentParticipation = null;
+    this.currentEnrollment = null;
     this.ParticipationSelectionDialog = false;
   }
 
   async onMakeParticipant(participation: Participation) {
-    //TODO
-    this.currentParticipation = null;
+    this.participations.unshift(participation);
     this.ParticipationSelectionDialog = false;
+    if (this.currentEnrollment != null) {
+      this.currentEnrollment = null;
+    }
   }
 
   async getActivities() {
