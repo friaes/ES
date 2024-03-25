@@ -12,6 +12,11 @@
             <v-col cols="12" sm="6" md="4">
               <v-text-field
                 label="*Motivation"
+                :rules="[
+                  (v) =>
+                    isMotivationValid(v) ||
+                    'Motivation has to be at least 10 characters',
+                ]"
                 required
                 v-model="selectedEnrollment.motivation"
                 data-cy="nameInput"
