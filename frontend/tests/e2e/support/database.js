@@ -25,6 +25,14 @@ dayBeforeYesterday.setDate(now.getDate() - 2);
 
 Cypress.Commands.add('deleteAllButArs', () => {
   cy.task('queryDatabase', {
+    query: "DELETE FROM PARTICIPATION",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ENROLLMENT",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
     query: "DELETE FROM ACTIVITY",
     credentials: credentials,
   })
@@ -255,7 +263,7 @@ function generateEnrollmentTuple(id, enrollment_date_time, motivation, activity_
     + enrollment_date_time + "', '"
     + motivation + "', '"
     + activity_id + "', '"
-    + volunteer_id + ")";
+    + volunteer_id + "')";
 }
 
 function generateActivityTuple(id, description, name, participants_number_limit) {
@@ -263,12 +271,12 @@ function generateActivityTuple(id, description, name, participants_number_limit)
     + id + "', '2024-02-06 17:58:21.402146', '2024-01-06 17:58:21.402146', '"
     + description + "', '2024-02-08 17:58:21.402146', '"
     + name + "', '"
-    + participants_number_limit + "', 'Lisbon', '2024-02-07 17:58:21.40214', 'APPROVED', 1)";
+    + participants_number_limit + "', 'Lisbon', '2024-02-07 17:58:21.40214', 'APPROVED', '1')";
 }
 
 function generateParticipationTuple(id, activity_id, volunteer_id) {
   return "VALUES ('"
     + id + "', '2024-02-06 18:51:37.595713', '5', '"
     + activity_id + "', '"
-    + volunteer_id + ")";
+    + volunteer_id + "')";
 }
