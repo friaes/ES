@@ -32,7 +32,7 @@
         <p>{{ isParticipating(item) }}</p>
       </template>
       <template v-slot:[`item.action`]="{ item }">
-        <v-tooltip v-if="!isParticipating(item) && activity.numberOfParticipations < activity.participantsNumberLimit" bottom>
+        <v-tooltip v-if="!isParticipating(item) && isLimitExceeded(activity)" bottom>
           <template v-slot:activator="{ on }">
             <v-icon
               class="mr-2 action-button"
@@ -158,6 +158,9 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
     return this.participations.some((p) => p.volunteerId === enrollment.volunteerId);
   }
 
+  isLimitExceeded(activity: Activity) {
+    return activity.numberOfParticipations < activity.participantsNumberLimit;
+  }
 }
 </script>
 
