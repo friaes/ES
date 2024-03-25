@@ -141,11 +141,11 @@ Cypress.Commands.add('createParticipations', () => {
   });
   //Participations
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateParticipationTuple(5, 1, 4),
+    query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(5, 1, 4),
     credentials: credentials,
   });
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateParticipationTuple(6, 2, 3),
+    query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(6, 2, 3),
     credentials: credentials,
   });
 
