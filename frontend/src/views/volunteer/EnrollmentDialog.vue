@@ -19,7 +19,7 @@
                 ]"
                 required
                 v-model="selectedEnrollment.motivation"
-                data-cy="nameInput"
+                data-cy="motivationInput"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -31,6 +31,7 @@
           color="blue-darken-1"
           variant="text"
           @click="$emit('close-enrollment-dialog')"
+          data-cy="closeEnrollmentDialog"
         >
           Close
         </v-btn>
