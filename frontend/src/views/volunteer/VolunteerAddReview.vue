@@ -62,7 +62,14 @@ export default class VolunteerAddReview extends Vue {
   created() {}
 
   validInput(value: string | null | undefined): true | string {
-    return true;
+    const inputValue = value || '';
+    if (inputValue.trim().length >= 10) {
+      this.validReview = true;
+      return true;
+    } else {
+      this.validReview = false;
+      return 'Review has to be at least 10 characters long';
+    }
   }
 
   async submit() {
