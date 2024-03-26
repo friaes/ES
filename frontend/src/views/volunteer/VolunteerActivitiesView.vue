@@ -56,6 +56,19 @@
             </template>
             <span>Apply for Activity</span>
           </v-tooltip>
+          <v-tooltip v-if="canReview(item)" bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                class="mr-2 action-button"
+                color="blue"
+                v-on="on"
+                data-cy="addReviewButton"
+                @click="addReview(item.institution)"
+                >edit</v-icon
+              >
+            </template>
+            <span>Add Review</span>
+          </v-tooltip>
         </template>
       </v-data-table>
       <enrollment-dialog
@@ -66,6 +79,13 @@
         v-on:save-enrollment="onSaveEnrollment"
         v-on:close-enrollment-dialog="onCloseEnrollmentDialog"
       />
+      <add-review
+        :current-item="this.currentInstitution"
+        v-if="addAssessment"
+        v-model="addAssessment"
+        v-on:close-dialog="onCloseDialog"
+        v-on:assessment-created="onAssessmentCreated"
+      />
     </v-card>
   </div>
 </template>
@@ -74,15 +94,22 @@
 import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
+import VolunteerView from '@/views/volunteer/VolunteerAddReview.vue';
 import { show } from 'cli-cursor';
 import EnrollmentDialog from '@/views/volunteer/EnrollmentDialog.vue';
 import Enrollment from '@/models/enrollment/Enrollment';
+import Institution from '@/models/institution/Institution';
+import Participation from '@/models/participation/Participation';
+import Assessment from '@/models/assessment/Assessment';
 
 @Component({
   components: {
     'enrollment-dialog': EnrollmentDialog,
   },
   methods: { show },
+  components: {
+    'add-review': VolunteerView,
+  },
 })
 export default class VolunteerActivitiesView extends Vue {
   dialog: boolean = false;
@@ -90,6 +117,10 @@ export default class VolunteerActivitiesView extends Vue {
   selectedActivity: Activity | null = null;
 
   activities: Activity[] = [];
+  participations: Participation[] = [];
+  assessments: Assessment[] = [];
+  currentInstitution: Institution | null = null;
+  addAssessment: boolean = false;
   search: string = '';
   enrollments: any[] = [];
   headers: object = [
