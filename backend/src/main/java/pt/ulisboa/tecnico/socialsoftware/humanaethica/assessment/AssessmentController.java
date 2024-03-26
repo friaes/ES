@@ -12,20 +12,27 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController()
-@RequestMapping(value = "/institutions/{institutionId}/assessments")
+@RequestMapping(value = "/institutions")
 public class AssessmentController {
     @Autowired
     AssessmentService assessmentService;
 
-    @GetMapping()
+    @GetMapping(value = "{institutionId}/assessments")
     public List<AssessmentDto> getInstitutionAssessments(@PathVariable Integer institutionId) {
         return assessmentService.getAssessmentsByInstitution(institutionId);
     }
 
-    @PostMapping()
     @PreAuthorize("(hasRole('ROLE_VOLUNTEER'))")
+    @PostMapping(value = "{institutionId}/assessments")
     public AssessmentDto createAssessment(Principal principal, @PathVariable Integer institutionId, @Valid @RequestBody AssessmentDto assessmentDto) {
         int userId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
         return assessmentService.createAssessment(userId, institutionId, assessmentDto);
+    }
+
+    @PreAuthorize("(hasRole('ROLE_VOLUNTEER'))")
+    @GetMapping(value = "myassessments")
+    public List<AssessmentDto> getVolunteerAssessments(Principal principal) {
+        int userId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
+        return assessmentService.getVolunteerAssessments(userId);
     }
 }
