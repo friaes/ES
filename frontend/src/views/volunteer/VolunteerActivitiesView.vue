@@ -40,8 +40,28 @@
             </template>
             <span>Report Activity</span>
           </v-tooltip>
+          <v-tooltip v-if="canReview(item)" bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                class="mr-2 action-button"
+                color="blue"
+                v-on="on"
+                data-cy="addReviewButton"
+                @click="addReview(item.institution)"
+                >edit</v-icon
+              >
+            </template>
+            <span>Add Review</span>
+          </v-tooltip>
         </template>
       </v-data-table>
+      <add-review
+        :current-item="this.currentInstitution"
+        v-if="addAssessment"
+        v-model="addAssessment"
+        v-on:close-dialog="onCloseDialog"
+        v-on:assessment-created="onAssessmentCreated"
+      />
     </v-card>
   </div>
 </template>
@@ -50,13 +70,24 @@
 import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
+import VolunteerView from '@/views/volunteer/VolunteerAddReview.vue';
 import { show } from 'cli-cursor';
+import Institution from '@/models/institution/Institution';
+import Participation from '@/models/participation/Participation';
+import Assessment from '@/models/assessment/Assessment';
 
 @Component({
   methods: { show },
+  components: {
+    'add-review': VolunteerView,
+  },
 })
 export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
+  participations: Participation[] = [];
+  assessments: Assessment[] = [];
+  currentInstitution: Institution | null = null;
+  addAssessment: boolean = false;
   search: string = '';
   headers: object = [
     {
