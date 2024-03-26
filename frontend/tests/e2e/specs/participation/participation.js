@@ -20,6 +20,7 @@ describe('Participation', () => {
         cy.wait('@getEnrollments');
         cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
         .should('have.length', 2)
+        .eq(0).children().eq(2).should('contain', 'false')
     });
 });
   
