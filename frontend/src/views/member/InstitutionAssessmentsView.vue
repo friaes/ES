@@ -37,6 +37,12 @@ export default class InstitutionAssessmentsView extends Vue {
 
   headers: object = [
     {
+      text: 'Volunteer Name',
+      value: 'volunteerName',
+      align: 'left',
+      width: '30%',
+    },
+    {
       text: 'Review',
       value: 'review',
       align: 'left',
