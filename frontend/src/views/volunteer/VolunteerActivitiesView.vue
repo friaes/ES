@@ -157,6 +157,8 @@ export default class VolunteerActivitiesView extends Vue {
     await this.$store.dispatch('loading');
     try {
       this.activities = await RemoteServices.getActivities();
+      this.participations = await RemoteServices.getVolunteerParticipations();
+      this.assessments = await RemoteServices.getVolunteerAssessments();
     } catch (error) {
       await this.$store.dispatch('error', error);
     }
@@ -176,6 +178,25 @@ export default class VolunteerActivitiesView extends Vue {
         await this.$store.dispatch('error', error);
       }
     }
+  }
+
+  addReview(institution: Institution) {
+    this.addAssessment = true;
+    this.currentInstitution = institution;
+  }
+
+  onCloseDialog() {
+    this.addAssessment = false;
+  }
+
+  async onAssessmentCreated(assessment: Assessment) {
+    this.assessments.push(assessment);
+    this.addAssessment = false;
+  }
+
+  canReview(item: Activity) {
+    if (!item.formattedEndingDate) return false;
+    return true;
   }
 }
 </script>
