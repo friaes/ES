@@ -26,6 +26,8 @@ describe('Participation', () => {
         cy.get('[data-cy="rating"]').type('3');
         cy.get('[data-cy="makeParticipant"]').click()
         cy.wait('@createParticipation');
+        cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
+        .eq(0).children().eq(2).should('contain', 'true')
     });
 });
   
