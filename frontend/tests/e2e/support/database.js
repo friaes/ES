@@ -9,9 +9,9 @@ const credentials = {
 const INSTITUTION_COLUMNS = "institutions (id, active, confirmation_token, creation_date, email, name, nif, token_generation_date)";
 const USER_COLUMNS = "users (user_type, id, creation_date, name, role, state, institution_id)";
 const AUTH_USERS_COLUMNS = "auth_users (auth_type, id, active, email, username, user_id)";
-const ACTIVITY_COLUMNS  = "activity (id, application_deadline, creation_date, description, ending_date, name, participants_number_limit, region, starting_date, state, institution_id)";
-const ENROLLMENT_COLUMNS = "enrollment (id, enrollment_date_time, motivation, activity_id, volunteer_id)"
-const PARTICIPATION_COLUMNS = "participation (id, acceptance_date, rating, activity_id, volunteer_id)"
+const PARTICIPATION_COLUMNS = "participation (id, acceptance_date, rating, activity_id, volunteer_id)";
+const ENROLLMENT_COLUMNS = "enrollment (id, enrollment_date_time, motivation, activity_id, volunteer_id)";
+const ACTIVITY_COLUMNS = "activity (id, application_deadline, creation_date, description, ending_date, name, participants_number_limit, region, starting_date, state, institution_id)";
 
 const now = new Date();
 const tomorrow = new Date(now);
@@ -194,26 +194,39 @@ Cypress.Commands.add('createParticipations', () => {
 
 });
 
+function constructEntry(...args) {
+  let values = args.map(arg => arg === null ? "NULL" : `'${arg}'`).join(", ");
+  values = values.replace(/'NULL'/g, "NULL");
+  return ` VALUES (${values})`;
+}
+
+
 function generateAuthUserTuple(id, authType, username, userId) {
-  return "VALUES ('"
-    + authType + "', '"
-    + id + "', 't', 'demo_member@mail.com','"
-    + username + "', '"
-    + userId + "')"
+  return constructEntry(authType, id, "t", "demo_member@mail.com", username, userId);
 }
 
 function generateUserTuple(id, userType, name, role, institutionId) {
-  return "VALUES ('"
-    + userType + "', '"
-    + id + "', '2022-02-06 17:58:21.419878', '"
-    + name + "', '"
-    + role + "', 'ACTIVE', "
-    + institutionId + ")";
+  return constructEntry(userType, id, "2022-02-06 17:58:21.419878", name, role, "ACTIVE", institutionId);
 }
 
-function generateInstitutionTuple(id) {
-  return "VALUES ('"
-    + id + "', 't', 'abca428c09862e89', '2022-08-06 17:58:21.402146','demo_institution@mail.com', 'DEMO INSTITUTION', '000000000', '2024-02-06 17:58:21.402134')";
+function generateInstitutionTupleForAssessment(id, name, nif) {
+  return constructEntry(id, "t", "abca428c09862e89", "2024-02-06 17:58:21.402146", "demo_institution@mail.com", name, nif, "2024-02-06 17:58:21.402134")
+}
+
+function generateActivityTuple(id, description, name, participants_number_limit, state, institution_id) {
+  return constructEntry(
+      id, "2024-02-06 17:58:21.402146", "2024-02-06 17:58:21.402146",
+      description, "2024-02-08 10:58:21.402146", name, participants_number_limit, "Lisbon",
+      "2024-02-07 17:58:21.402146", state, institution_id
+  );
+}
+
+function generateEnrollmentTuple(id, activity_id) {
+  return constructEntry(id, "2024-02-06 18:51:37.595713", "sql-inserted-motivation", activity_id, "3");
+}
+
+function generateParticipationTupleForAssessment(id, activity_id) {
+  return constructEntry(id, "2024-02-06 18:51:37.595713", "5", activity_id, "3");
 }
 
 //para criar a base de dados para o teste enrollment.js
