@@ -25,14 +25,6 @@ dayBeforeYesterday.setDate(now.getDate() - 2);
 
 Cypress.Commands.add('deleteAllButArs', () => {
   cy.task('queryDatabase', {
-    query: "DELETE FROM PARTICIPATION",
-    credentials: credentials,
-  });
-  cy.task('queryDatabase', {
-    query: "DELETE FROM ENROLLMENT",
-    credentials: credentials,
-  });
-  cy.task('queryDatabase', {
     query: "DELETE FROM ACTIVITY",
     credentials: credentials,
   })
@@ -71,6 +63,34 @@ Cypress.Commands.add('createDemoEntities', () => {
     query: "INSERT INTO " + AUTH_USERS_COLUMNS + generateAuthUserTuple(3, "DEMO", "demo-volunteer", 3),
     credentials: credentials,
   })
+});
+
+//para limpar a base de dados depois do teste participation.js
+Cypress.Commands.add('deleteAllButArsforParticipations', () => {
+  cy.task('queryDatabase', {
+    query: "DELETE FROM PARTICIPATION",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ENROLLMENT",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ACTIVITY",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM AUTH_USERS WHERE NOT (username = 'ars')",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM USERS WHERE NOT (name = 'ars')",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM INSTITUTIONS",
+    credentials: credentials,
+  });
 });
 
 Cypress.Commands.add('createParticipations', () => {
@@ -115,28 +135,28 @@ Cypress.Commands.add('createParticipations', () => {
   });
   // Activities
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(1, "Has vacancies", "A1", 2, 1),
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTupleForPaticipation(1, "Has vacancies", "A1", 2, 1),
     credentials: credentials,
   });
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(2, "Has no vacancies", "A2", 1, 1),
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTupleForPaticipation(2, "Has no vacancies", "A2", 1, 1),
     credentials: credentials,
   });
   // Enrollments
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(1, "2024-02-06 18:51:37.595713", "Has vacancies and do not participate", 1, 3),
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTupleForParticipation(1, "2024-02-06 18:51:37.595713", "Has vacancies and do not participate", 1, 3),
     credentials: credentials,
   });
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(2, "2024-02-06 19:51:37.595713", "Has vacancies and participate", 1, 4),
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTupleForParticipation(2, "2024-02-06 19:51:37.595713", "Has vacancies and participate", 1, 4),
     credentials: credentials,
   });
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(3, "2024-02-06 18:51:37.595713", "Has no vacancies and participate", 2, 3),
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTupleForParticipation(3, "2024-02-06 18:51:37.595713", "Has no vacancies and participate", 2, 3),
     credentials: credentials,
   });
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(4, "2024-02-06 20:51:37.595713", "Has no vacancies and do not participate", 2, 5),
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTupleForParticipation(4, "2024-02-06 20:51:37.595713", "Has no vacancies and do not participate", 2, 5),
     credentials: credentials,
   });
   //Participations
@@ -173,7 +193,7 @@ function generateInstitutionTuple(id) {
     + id + "', 't', 'abca428c09862e89', '2022-08-06 17:58:21.402146','demo_institution@mail.com', 'DEMO INSTITUTION', '000000000', '2024-02-06 17:58:21.402134')";
 }
 
-function generateEnrollmentTuple(id, enrollment_date_time, motivation, activity_id, volunteer_id) {
+function generateEnrollmentTupleForParticipation(id, enrollment_date_time, motivation, activity_id, volunteer_id) {
   return "VALUES ('"
     + id + "', '"
     + enrollment_date_time + "', '"
@@ -182,7 +202,7 @@ function generateEnrollmentTuple(id, enrollment_date_time, motivation, activity_
     + volunteer_id + "')";
 }
 
-function generateActivityTuple(id, description, name, participants_number_limit) {
+function generateActivityTupleForPaticipation(id, description, name, participants_number_limit) {
   return "VALUES ('"
     + id + "', '2024-02-06 17:58:21.402146', '2024-01-06 17:58:21.402146', '"
     + description + "', '2024-02-08 17:58:21.402146', '"
