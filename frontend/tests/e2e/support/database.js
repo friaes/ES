@@ -111,15 +111,15 @@ Cypress.Commands.add('createDemoForEnrollments', () => {
     credentials: credentials,
   })
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(1, "Enrollment is open", "A1", 1, "APPROVED", 1),
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTupleforEnrollment(1, "Enrollment is open", "A1", 1, "APPROVED", 1),
     credentials: credentials,
   })
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(2, "Enrollment is open and it is already enrolled", "A2", 2, "APPROVED", 1),
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTupleforEnrollment(2, "Enrollment is open and it is already enrolled", "A2", 2, "APPROVED", 1),
     credentials: credentials,
   })
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(3, "Enrollment is closed", "A3", 3, "APPROVED", 1, false),
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTupleforEnrollment(3, "Enrollment is closed", "A3", 3, "APPROVED", 1, false),
     credentials: credentials,
   })
   cy.task('queryDatabase',  {
@@ -151,7 +151,7 @@ function generateInstitutionTuple(id) {
 }
 
 //para criar a base de dados para o teste enrollment.js
-function generateActivityTuple(id, discription, name, participants_number, state, institution_id, flag=true) {
+function generateActivityTupleforEnrollment(id, discription, name, participants_number, state, institution_id, flag=true) {
   if (flag) {
     return "VALUES ('"
     + id + "', '2024-08-06 17:58:21.402146', '2024-08-06 17:58:21.402146','"
