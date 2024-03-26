@@ -1,11 +1,11 @@
 describe('Enrollment', () => {
     beforeEach(() => {
-        cy.deleteAllButArsforEnrollments();
+        cy.deleteAllButArs();
         cy.createDemoForEnrollments();
     });
 
     afterEach(() => {
-        cy.deleteAllButArsforEnrollments();
+        cy.deleteAllButArs();
     });
 
     it('create enrollment', () => {
@@ -24,7 +24,7 @@ describe('Enrollment', () => {
             .should('have.length', 3)
             .eq(0)
             .children()
-            .should('have.length', 12)
+            .should('have.length', 13)
 
         // verifica se a primeira atividade é a atividade 1 e tem 0 inscritos
         cy.get('[data-cy="memberActivitiesTable"] tbody tr')
@@ -64,7 +64,7 @@ describe('Enrollment', () => {
             .should('have.length', 3)
             .eq(0)
             .children()
-            .should('have.length', 12)
+            .should('have.length', 13)
 
         // verifica se a primeira atividade é a atividade 1 e tem 1 inscritos
         cy.get('[data-cy="memberActivitiesTable"] tbody tr')
@@ -81,10 +81,10 @@ describe('Enrollment', () => {
             .should('have.length', 1)
             .eq(0)
             .children()
-            .should('have.length', 2)
+            .should('have.length', 5)
 
         cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
-            .eq(0).children().eq(0).should('contain', MOTIVATION)
+            .eq(0).children().eq(1).should('contain', MOTIVATION)
         
         cy.logout();    
     });    
