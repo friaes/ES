@@ -52,4 +52,14 @@ public class AssessmentService {
 
         return new AssessmentDto(assessment);
     }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<AssessmentDto> getVolunteerAssessments(Integer userId) {
+        if (userId == null) throw  new HEException(USER_NOT_FOUND);
+        userRepository.findById(userId).orElseThrow(() -> new HEException(USER_NOT_FOUND, userId));
+
+        return assessmentRepository.getVolunteerAssessments(userId).stream()
+                .map(AssessmentDto::new)
+                .toList();
+    }
 }
