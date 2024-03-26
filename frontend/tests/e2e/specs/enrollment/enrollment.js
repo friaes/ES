@@ -26,7 +26,7 @@ describe('Enrollment', () => {
             .children()
             .should('have.length', 12)
 
-        // verifica se a primeira atividade Ã© a atividade 1 e tem 0 inscritos
+        // verifica se a primeira atividade é a atividade 1 e tem 0 inscritos
         cy.get('[data-cy="memberActivitiesTable"] tbody tr')
             .eq(0).children().eq(0).should('contain', 'A1')
         cy.get('[data-cy="memberActivitiesTable"] tbody tr')
@@ -66,7 +66,7 @@ describe('Enrollment', () => {
             .children()
             .should('have.length', 12)
 
-        // verifica se a primeira atividade Ã© a atividade 1 e tem 0 inscritos
+        // verifica se a primeira atividade é a atividade 1 e tem 1 inscritos
         cy.get('[data-cy="memberActivitiesTable"] tbody tr')
             .eq(0).children().eq(0).should('contain', 'A1')
         cy.get('[data-cy="memberActivitiesTable"] tbody tr')

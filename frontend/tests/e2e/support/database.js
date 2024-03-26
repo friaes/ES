@@ -64,6 +64,7 @@ Cypress.Commands.add('createDemoEntities', () => {
   })
 });
 
+//para limpar a base de dados depois do teste enrollment.js
 Cypress.Commands.add('deleteAllButArsforEnrollments', () => {
   cy.task('queryDatabase', {
     query: "DELETE FROM ENROLLMENT",
@@ -87,6 +88,7 @@ Cypress.Commands.add('deleteAllButArsforEnrollments', () => {
   });
 });
 
+//para criar a base de dados para o teste enrollment.js
 Cypress.Commands.add('createDemoForEnrollments', () => {
   cy.task('queryDatabase',  {
     query: "INSERT INTO " + INSTITUTION_COLUMNS + generateInstitutionTuple(1),
@@ -148,6 +150,7 @@ function generateInstitutionTuple(id) {
     + id + "', 't', 'abca428c09862e89', '2022-08-06 17:58:21.402146','demo_institution@mail.com', 'DEMO INSTITUTION', '000000000', '2024-02-06 17:58:21.402134')";
 }
 
+//para criar a base de dados para o teste enrollment.js
 function generateActivityTuple(id, discription, name, participants_number, state, institution_id, flag=true) {
   if (flag) {
     return "VALUES ('"
