@@ -9,6 +9,7 @@ describe('Participation', () => {
         cy.demoMemberLogin();
         cy.intercept('GET', '/users/*/getInstitution').as('getInstitutions');
         cy.intercept('GET', '/activities/*/enrollments').as('getEnrollments');
+        cy.intercept('POST', '/activities/*/participations').as('createParticipation');
         
         cy.get('[data-cy="institution"]').click();
         cy.get('[data-cy="activities"]').click();
@@ -21,6 +22,10 @@ describe('Participation', () => {
         cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
         .should('have.length', 2)
         .eq(0).children().eq(2).should('contain', 'false')
+        cy.get('[data-cy="selectParticipant"]').eq(0).click()
+        cy.get('[data-cy="rating"]').type('3');
+        cy.get('[data-cy="makeParticipant"]').click()
+        cy.wait('@createParticipation');
     });
 });
   

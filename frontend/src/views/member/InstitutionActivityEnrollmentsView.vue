@@ -38,6 +38,7 @@
               class="mr-2 action-button"
               @click="selectParticipant(item)"
               v-on="on"
+              data-cy="selectParticipant"
               >check
             </v-icon>
           </template>

@@ -35,7 +35,7 @@
           color="blue-darken-1"
           variant="text"
           @click="makeParticipant"
-          data-cy="selectParticipation"
+          data-cy="makeParticipant"
           >
           Make Participant
           </v-btn>
