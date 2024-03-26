@@ -28,6 +28,9 @@ describe('Participation', () => {
         cy.wait('@createParticipation');
         cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
         .eq(0).children().eq(2).should('contain', 'true')
+        cy.get('[data-cy="getActivities"]').click()
+        cy.get('[data-cy="memberActivitiesTable"] tbody tr')
+        .eq(0).children().eq(3).should('contain', '2')
     });
 });
   
