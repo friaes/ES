@@ -25,6 +25,18 @@ dayBeforeYesterday.setDate(now.getDate() - 2);
 
 Cypress.Commands.add('deleteAllButArs', () => {
   cy.task('queryDatabase', {
+    query: "DELETE FROM ASSESSMENT",
+    credentials: credentials,
+  })
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ENROLLMENT",
+    credentials: credentials,
+  })
+  cy.task('queryDatabase', {
+    query: "DELETE FROM PARTICIPATION",
+    credentials: credentials,
+  })
+  cy.task('queryDatabase', {
     query: "DELETE FROM ACTIVITY",
     credentials: credentials,
   })
@@ -44,9 +56,37 @@ Cypress.Commands.add('deleteAllButArs', () => {
 
 Cypress.Commands.add('createDemoEntities', () => {
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + INSTITUTION_COLUMNS + generateInstitutionTuple(1),
+    query: "INSERT INTO " + INSTITUTION_COLUMNS + generateInstitutionTuple(1, 'DEMO INSTITUTION', '000000000'),
     credentials: credentials,
   })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + USER_COLUMNS + generateUserTuple(2, "MEMBER","DEMO-MEMBER", "MEMBER", 1),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + AUTH_USERS_COLUMNS + generateAuthUserTuple(2, "DEMO", "demo-member", 2),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + USER_COLUMNS + generateUserTuple(3, "VOLUNTEER","DEMO-VOLUNTEER", "VOLUNTEER", null),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + AUTH_USERS_COLUMNS + generateAuthUserTuple(3, "DEMO", "demo-volunteer", 3),
+    credentials: credentials,
+  })
+});
+
+Cypress.Commands.add('createDemoAssessments', () => {
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + INSTITUTION_COLUMNS + generateInstitutionTuple(1, 'DEMO INSTITUTION', '000000000'),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + INSTITUTION_COLUMNS + generateInstitutionTuple(2, 'DEMO INSTITUTION-2', '000000002'),
+    credentials: credentials,
+  })
+
   cy.task('queryDatabase',  {
     query: "INSERT INTO " + USER_COLUMNS + generateUserTuple(2, "MEMBER","DEMO-MEMBER", "MEMBER", 1),
     credentials: credentials,
@@ -63,7 +103,62 @@ Cypress.Commands.add('createDemoEntities', () => {
     query: "INSERT INTO " + AUTH_USERS_COLUMNS + generateAuthUserTuple(3, "DEMO", "demo-volunteer", 3),
     credentials: credentials,
   })
-});
+
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(1, "Same institution is enrolled and participates", "A1", 1, "APPROVED", 1),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(2, "Same institution is enrolled and participates", "A2", 1, "APPROVED", 1),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(3, "Same institution is enrolled and does not participate", "A3", 2, "APPROVED", 1),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(4, "Same institution is not enrolled", "A4", 2, "APPROVED", 1),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(5, "Same institution before end date", "A5", 2, "APPROVED", 1),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(6, "Other institution is enrolled and participates", "A6", 3, "APPROVED", 2),
+    credentials: credentials,
+  })
+
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(1, 1),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(2, 2),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(3, 3),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(4, 6),
+    credentials: credentials,
+  })
+
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(1, 1),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(2, 2),
+    credentials: credentials,
+  })
+  cy.task('queryDatabase',  {
+    query: "INSERT INTO " + PARTICIPATION_COLUMNS + generateParticipationTuple(3, 6),
+    credentials: credentials,
+  })
+})
 
 function constructEntry(...args) {
   let values = args.map(arg => arg === null ? "NULL" : `'${arg}'`).join(", ");
