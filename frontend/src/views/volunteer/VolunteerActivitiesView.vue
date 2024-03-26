@@ -260,6 +260,7 @@ export default class VolunteerActivitiesView extends Vue {
 
   canReview(item: Activity) {
     if (!item.formattedEndingDate) return false;
+    if (new Date() <= new Date(item.endingDate)) return false;
     return true;
   }
 }
