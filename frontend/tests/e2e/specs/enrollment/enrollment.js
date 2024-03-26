@@ -1,14 +1,15 @@
 describe('Enrollment', () => {
     beforeEach(() => {
-        cy.deleteAllButArs();
+        cy.deleteAllButArsforEnrollments();
         cy.createDemoForEnrollments();
     });
 
     afterEach(() => {
+        cy.deleteAllButArsforEnrollments();
     });
 
     it('create enrollment', () => {
-        const MOTIVATION = 'I want to escape and home!';
+        const MOTIVATION = 'I want to escape and go home!';
 
         cy.demoMemberLogin()
         // intercept get activities

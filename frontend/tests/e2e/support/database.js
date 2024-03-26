@@ -24,14 +24,6 @@ dayBeforeYesterday.setDate(now.getDate() - 2);
 
 Cypress.Commands.add('deleteAllButArs', () => {
   cy.task('queryDatabase', {
-    query: "DELETE FROM ENROLLMENT",
-    credentials: credentials,
-  });
-  cy.task('queryDatabase', {
-    query: "DELETE FROM ACTIVITY",
-    credentials: credentials,
-  })
-  cy.task('queryDatabase', {
     query: "DELETE FROM AUTH_USERS WHERE NOT (username = 'ars')",
     credentials: credentials,
   });
@@ -66,6 +58,29 @@ Cypress.Commands.add('createDemoEntities', () => {
     query: "INSERT INTO " + AUTH_USERS_COLUMNS + generateAuthUserTuple(3, "DEMO", "demo-volunteer", 3),
     credentials: credentials,
   })
+});
+
+Cypress.Commands.add('deleteAllButArsforEnrollments', () => {
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ENROLLMENT",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ACTIVITY",
+    credentials: credentials,
+  })
+  cy.task('queryDatabase', {
+    query: "DELETE FROM AUTH_USERS WHERE NOT (username = 'ars')",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM USERS WHERE NOT (name = 'ars')",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM INSTITUTIONS",
+    credentials: credentials,
+  });
 });
 
 Cypress.Commands.add('createDemoForEnrollments', () => {
