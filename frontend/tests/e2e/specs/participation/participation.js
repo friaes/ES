@@ -18,6 +18,8 @@ describe('Participation', () => {
         .eq(0).children().eq(3).should('contain', '1')
         cy.get('[data-cy="showEnrollments"]').eq(0).click()
         cy.wait('@getEnrollments');
+        cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
+        .should('have.length', 2)
     });
 });
   
