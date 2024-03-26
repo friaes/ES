@@ -80,6 +80,7 @@ export default class VolunteerAddReview extends Vue {
         this.currentItem.id,
         this.assessment,
       );
+      this.$emit('assessment-created', this.assessment);
     } catch (error) {
       await this.$store.dispatch('error', error);
     }
