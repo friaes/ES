@@ -105,11 +105,9 @@ import Assessment from '@/models/assessment/Assessment';
 @Component({
   components: {
     'enrollment-dialog': EnrollmentDialog,
-  },
-  methods: { show },
-  components: {
     'add-review': VolunteerView,
   },
+  methods: { show },
 })
 export default class VolunteerActivitiesView extends Vue {
   dialog: boolean = false;
